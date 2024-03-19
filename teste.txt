@@ -1,0 +1,42 @@
+public function up(): void
+    {
+        Schema::create('contatos', function (Blueprint $table) {
+            $table->id();
+            $table->string('nome')->nullable();
+            $table->string('cpf')->unique();
+            $table->string('telefone')->unique();
+            $table->string('email')->unique();
+            $table->string('login')->unique();
+            $table->string('senha');
+            $table->string('cliente')->unique();
+            $table->timestamps();
+        });
+    }
+
+//
+
+    public function up(): void
+    {
+        Schema::create('clientes', function (Blueprint $table) {
+            $table->id();
+            $table->string('nome');
+            $table->string('cnpj');
+            $table->string('endereco');
+            $table->string('telefone');
+            $table->timestamps();
+        });
+    }
+
+//
+
+    public function up(): void
+    {
+        Schema::create('pedidos', function (Blueprint $table) {
+            $table->id();
+            $table->string('dataPedido');
+            $table->string('dataFinal');
+            $table->string('valor');
+            $table->string('conteudo');
+            $table->timestamps();
+        });
+    }
