@@ -14,12 +14,10 @@ use App\Http\Controllers\ClienteController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function() {
+    return view('clientes.index');
 });
 
-Route::resource('clientes', ClienteController::class);
+Route::resource('cliente', ClienteController::class);
 
-Route::get('/layouts', function() {
-    return view('layouts.app');
-});
+//Route::get('lista', 'ClienteController@listarClientes');
