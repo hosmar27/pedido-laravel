@@ -99,3 +99,8 @@ return new class extends Migration
         Schema::dropIfExists('pedidos');
     }
 };
+
+
+    ENTRAR NOS CONTATOS PELO CLIENTE
+    <i class="bi bi-folder2"></i>
+    <i class="bi bi-folder2-open"></i>
