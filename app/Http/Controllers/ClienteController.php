@@ -51,25 +51,26 @@ class ClienteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Cliente $id)
+    public function edit($id)
     {
-        $cliente = Cliente::find($id);
-        return view('clientes.edit');
+        $cliente = Cliente::findOrFail($id);
+    //  dd($cliente);
+        return view('clientes.edit',['cliente'=>$cliente]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Cliente $id)
+    public function update(Request $request)
     {
-        $cliente = Cliente::find($id);
+        $cliente = Cliente::find($request->id);
         $cliente->nome = $request->input('nome');
         $cliente->cnpj = $request->input('cnpj');
         $cliente->endereco = $request->input('endereco');
         $cliente->telefone = $request->input('telefone');   
-
+        
         $cliente->save();       // Salvou os novos dados no DB
-        return redirect('/clientes')->with('sucess','Cliente atualizado com sucesso');
+        return redirect('/cliente')->with('updated','Cliente atualizado com sucesso');
     }
 
     /**
@@ -77,7 +78,7 @@ class ClienteController extends Controller
      */
     public function destroy(Cliente $cliente)
     {
-        //
+        // ao invés de deletar, fazer update inativo/ativo para salvar os dados do cliente mesmo quando deletado
     }
 
     /**

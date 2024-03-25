@@ -2,8 +2,7 @@
 @section('content')
     <section>
         <div class="container">
-            @dd('$cliente')
-            <form action="/clientes/{{ $cliente->id }}" method="POST">
+            <form action="/cliente/{{$cliente->id}}/update" method="POST">
             @csrf
             @method('PUT')
                 <h1>Editar Clientes</h1>
@@ -39,7 +38,7 @@
                     </div>
                 </div>
                 <div class="buttons">
-                    <button class="btn-submit" type="submit" action="{{ route('clientes.update')}}">Editar</button>
+                    <button class="btn-submit" type="submit">Editar</button>
                     <a href="{{ route('cliente.index')}}">Voltar</a>
                 </div>
             </form>
