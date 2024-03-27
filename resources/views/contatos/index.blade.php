@@ -5,39 +5,54 @@
     <section>
         <div class="container">
             <div class="column">
-                <h1>Lista de clientes</h1>
+                <h1>Lista de Contatos</h1>
+                <form method="GET" action="{{ route('contato.index') }}" accept-charset="UTF-8" role="search">
+                    <div class="table-search">
+                        <div>
+                            <button class="search-select">
+                                Search Product
+                            </button>
+                            <span class="search-select-arrow">
+                                <i class="fas fa-caret-down"></i>
+                            </span>
+                        </div>
+                        <div class="relative">
+                            <input class="search-input" type="text" name="search" placeholder="Search product..." value="{{ request('search') }}">
+                        </div>
+                    </div>
+                </form>
                 <table class="table table-hover">
                     <tr>
                         <th>Nome</th>
-                        <th>CNPJ</th>
-                        <th>Endereço</th>
+                        <th>Email</th>
                         <th>Telefone</th>
+                        <th>CPF</th>
                         <th>Excluir/Editar</th>
                     </tr>
-                    @foreach ($clientes as $cliente)
+                    @foreach ($contatos as $contato)
                     <tr> 
-                        <td>{{$cliente->nome}}</td>
-                        <td>{{$cliente->cnpj}}</td>
-                        <td>{{$cliente->endereco}}</td>
-                        <td>{{$cliente->telefone}}</td>
+                        <td>{{$contato->nome}}</td>
+                        <td>{{$contato->email}}</td>
+                        <td>{{$contato->telefone}}</td>
+                        <td>{{$contato->cpf}}</td>
                         <td class="action">
-                            <a href="{{ route('cliente.edit', $cliente->id) }}" class="btn-submit">Editar</a>
-                            <form method="post" action="{{ route('cliente.destroy', $cliente->id) }}">
+                            <a href="{{ route('contato.edit', $contato->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
+                            <form method="post" action="{{ route('contato.destroy', $contato->id) }}">
                                 @csrf
                                 @method('delete')
-                                    <input type="submit" value="Excluir" class="btn-submit">
+                                    <input type="submit" value="Excluir" class="btn-submit" style="width: 100px;">
                             </form>
                         </td>
                     </tr>
                     @endforeach
                 </table>
-                <a href="{{ route('cliente.create')}}" class="btn-submit">Cadastrar Cliente</button></a>
+                <a href="{{ route('contato.create')}}" class="btn-submit" style="width: 100px;">Cadastrar Contato</button></a>
 
             </div>
         </div>
     </section>
     </script>
-@if ($message = Session::get('delete'))
+@if ($message = Session::get('deleted'))
     <script type="text/javascript">
         const Toast3 = Swal.mixin({
             toast: true,
@@ -51,8 +66,8 @@
             }
         });
         Toast3.fire({
-            icon: "delete",
-            title: "Cliente excluido"
+            icon: "success",
+            title: "Contato excluido"
         });
     </script>
 @endif
@@ -71,7 +86,7 @@
         });
         Toast.fire({
             icon: "success",
-            title: "Cliente adicionado"
+            title: "Contato adicionado"
         });
     </script>
 @endif
@@ -89,8 +104,8 @@
             }
         });
         Toast2.fire({
-            icon: "update",
-            title: "Cliente atualizado"
+            icon: "success",
+            title: "Contato atualizado"
         });
     </script>
 @endif

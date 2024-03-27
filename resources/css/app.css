@@ -61,7 +61,7 @@ label{
     cursor: pointer;
     font-size: 14px;
     height: 48px;
-    width: 150px;
+    text-align: center;
     letter-spacing: .25px;
     padding: 2px 24px;
     font-weight: bold;

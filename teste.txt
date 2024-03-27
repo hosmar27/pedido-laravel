@@ -104,3 +104,19 @@ return new class extends Migration
     ENTRAR NOS CONTATOS PELO CLIENTE
     <i class="bi bi-folder2"></i>
     <i class="bi bi-folder2-open"></i>
+
+                <!-- <form method="GET" action="{{ route('products.index') }}" accept-charset="UTF-8" role="search">
+                    <div class="table-search">
+                        <div>
+                            <button class="search-select">
+                                Search Product
+                            </button>
+                            <span class="search-select-arrow">
+                                <i class="fas fa-caret-down"></i>
+                            </span>
+                        </div>
+                        <div class="relative">
+                            <input class="search-input" type="text" name="search" placeholder="Search product..." value="{{ request('search') }}">
+                        </div>
+                    </div>
+                </form> -->

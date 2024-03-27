@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
 
 class ClienteController extends Controller
@@ -14,7 +13,7 @@ class ClienteController extends Controller
      */
     public function index()
     {
-        $query = DB::select("SELECT * FROM clientes");
+        $query = DB::select("SELECT * FROM `clientes` WHERE clientes.deleted_at IS null");
         $clientes = collect($query)->toArray();
         return view('clientes.index', ['clientes'=>$clientes]);
     }
@@ -43,9 +42,10 @@ class ClienteController extends Controller
         $cliente->cnpj = $request->cnpj;
         $cliente->telefone = $request->telefone;
         $cliente->endereco = $request->endereco;
+        
 
         $cliente->save();
-        return redirect()->route('cliente.index')->with('sucess','Product added sucessfuly');
+        return redirect()->route('cliente.index')->with('sucess','Cliente criado');
     }
 
     /**
@@ -54,7 +54,7 @@ class ClienteController extends Controller
     public function edit($id)
     {
         $cliente = Cliente::findOrFail($id);
-    //  dd($cliente);
+        //dd($cliente);
         return view('clientes.edit',['cliente'=>$cliente]);
     }
 
@@ -67,10 +67,10 @@ class ClienteController extends Controller
         $cliente->nome = $request->input('nome');
         $cliente->cnpj = $request->input('cnpj');
         $cliente->endereco = $request->input('endereco');
-        $cliente->telefone = $request->input('telefone');   
+        $cliente->telefone = $request->input('telefone');  
         
         $cliente->save();       // Salvou os novos dados no DB
-        return redirect('/cliente')->with('updated','Cliente atualizado com sucesso');
+        return redirect()->route('cliente.index')->with('update','Cliente atualizado');
     }
 
     /**
@@ -78,9 +78,9 @@ class ClienteController extends Controller
      */
     public function destroy(Cliente $cliente)
     {
-        // ao invés de deletar, fazer update inativo/ativo para salvar os dados do cliente mesmo quando deletado
+        Cliente::find($cliente->id)->delete();
+        return redirect()->route('cliente.index')->with('delete','Cliente excluido');
     }
-
     /**
      * Display the specified resource.
      */

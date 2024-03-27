@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ContatoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,5 +20,12 @@ Route::resource('cliente', ClienteController::class);
 Route::get('/cliente/{id}/edit',[ClienteController::class,'edit']);
 Route::put('/cliente/{id}/update',[ClienteController::class,'update']);
 
-//Route::get('/cliente/{id}/edit','ClienteController@edit'); // Puxa o $id do cliente do index para o edit
-//Route::put('/cliente/{id}', 'ClienteController@update');   // Envia os novos dados ao controller para fazer a alteração no DB
+Route::get('/cliente/{id}/destroy',[ClienteController::class,'destroy']);
+
+
+Route::resource('contato', ContatoController::class);
+
+Route::get('/contato/{id}/edit',[ContatoController::class,'edit']);
+Route::put('/contato/{id}/update',[ContatoController::class,'update']);
+
+Route::get('/contato/{id}/destroy',[ContatoController::class,'destroy']);
