@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ContatoController;
+use App\Http\Controllers\ProdutoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +26,17 @@ Route::get('/cliente/{id}/destroy',[ClienteController::class,'destroy']);
 
 Route::resource('contato', ContatoController::class);
 
+Route::get('/contato/select', [ContatoController::class,'select']);
+
 Route::get('/contato/{id}/edit',[ContatoController::class,'edit']);
 Route::put('/contato/{id}/update',[ContatoController::class,'update']);
 
 Route::get('/contato/{id}/destroy',[ContatoController::class,'destroy']);
+
+
+Route::resource('produto', ProdutoController::class);
+
+Route::get('/produto/{id}/edit',[ProdutoController::class,'edit']);
+Route::put('/produto/{id}/update',[ProdutoController::class,'update']);
+
+Route::get('/produto/{id}/destroy',[ProdutoController::class,'destroy']);

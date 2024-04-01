@@ -1,59 +1,52 @@
 @extends('layouts.app')
 @section('content')
 @vite(['resoucer/css/app.css','resources/js/app.js'])
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-</html>
+
     <section>
         <div class="container">
             <div class="column">
-                <h1>Lista de Contatos</h1>
-                <form method="GET" action="{{ route('contato.index') }}" accept-charset="UTF-8" role="search">
-                    <div class="table-search" style="width: 350px;display:flex;flex-direction:row">
-                        <div>
-                            <button class="btn-submit" style="width: 100px;height:35px">
-                                Procurar
-                            </button>
+                <h1>Lista de produtos</h1>
+                    <form method="GET" action="{{ route('produto.index') }}" accept-charset="UTF-8" role="search">
+                        <div class="table-search" style="width: 350px;display:flex;flex-direction:row">
+                            <div>
+                                <button class="btn-submit" style="width: 100px;height:35px">
+                                    Procurar
+                                </button>
+                            </div>
+                            <div class="relative">
+                                <input class="search-input" type="text" name="search" placeholder=" Digite aqui..." value="{{ request('search') }}" style="border-radius: 20px;border-color:#8200E6;width: 175px;height:35px">
+                            </div>
                         </div>
-                        <div class="relative">
-                            <input class="search-input" type="text" name="search" placeholder=" Digite aqui..." value="{{ request('search') }}" style="border-radius: 20px;border-color:#8200E6;width: 175px;height:35px">
-                        </div>
-                    </div>
-                </form>
+                    </form>
                 <table class="table table-hover">
                     <tr>
                         <th>Nome</th>
-                        <th>Email</th>
-                        <th>Telefone</th>
-                        <th>CPF</th>
+                        <th>Quantidade</th>
+                        <th>Valor</th>
+                        <th>Descrição</th>
                         <th>Excluir/Editar</th>
                     </tr>
-                    @foreach ($contatos as $contato)
+                    @foreach ($produtos as $produto)
                     <tr> 
-                        <td>{{$contato->nome}}</td>
-                        <td>{{$contato->email}}</td>
-                        <td>{{$contato->telefone}}</td>
-                        <td>{{$contato->cpf}}</td>
+                        <td>{{$produto->nome}}</td>
+                        <td>{{$produto->quantidade}}</td>
+                        <td>{{$produto->valor}}</td>
+                        <td>{{$produto->descricao}}</td>
                         <td class="action">
-                            <a href="{{ route('contato.edit', $contato->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
-                            <form method="post" action="{{ route('contato.destroy', $contato->id) }}">
+                            <a href="{{ route('produto.edit', $produto->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
+                            <form method="post" action="{{ route('produto.destroy', $produto->id) }}">
                                 @csrf
                                 @method('delete')
-                                    <input type="submit" value="Excluir" class="btn-submit" style="width: 150px;">
+                                    <input type="submit" value="Excluir" class="btn-submit" style="width: 100px;">
                             </form>
                         </td>
                     </tr>
                     @endforeach
                 </table>
                 <div class="buttons">
-                    <a href="{{ route('contato.create')}}" class="btn-submit" style="width: 100px;">Cadastrar</button></a>
+                    <a href="{{ route('produto.create')}}" class="btn-submit" style="width: 150px;">Cadastrar</button></a>
                     <div class="table-paginate">
-                        {{$contatos->links('layouts.pagination')}}
+                        {{$produtos->links('layouts.pagination')}}
                     </div>
                 </div>
             </div>
@@ -75,7 +68,7 @@
         });
         Toast3.fire({
             icon: "success",
-            title: "Contato excluido"
+            title: "produto excluido"
         });
     </script>
 @endif
@@ -94,7 +87,7 @@
         });
         Toast.fire({
             icon: "success",
-            title: "Contato adicionado"
+            title: "produto adicionado"
         });
     </script>
 @endif
@@ -113,7 +106,7 @@
         });
         Toast2.fire({
             icon: "success",
-            title: "Contato atualizado"
+            title: "produto atualizado"
         });
     </script>
 @endif

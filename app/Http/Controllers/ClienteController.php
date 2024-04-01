@@ -11,11 +11,25 @@ class ClienteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $query = DB::select("SELECT * FROM `clientes` WHERE clientes.deleted_at IS null");
         $clientes = collect($query)->toArray();
-        return view('clientes.index', ['clientes'=>$clientes]);
+
+        $keyword = $request->get('search');
+        $perPage = 4;
+
+        if(!empty($keyword)){
+            $clientes = Cliente::where('nome','LIKE',"%$keyword%")
+                ->orWhere('cnpj','LIKE',"%$keyword%")
+                ->orWhere('endereco','LIKE',"%$keyword%")
+                ->orWhere('telefone','LIKE',"%$keyword%")
+                ->latest()->paginate($perPage);
+        }else{
+            $clientes = Cliente::latest()->paginate($perPage);
+        }
+
+        return view('clientes.index', ['clientes'=>$clientes])->with('i',(request()->input('page',1) -1) *4);
     }
 
     /**

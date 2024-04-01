@@ -36,17 +36,17 @@ label{
 
 .row{
     display: flex;
-    width: 60%;
-    justify-content: space-around;
-    height: 18vh;
-
+    flex-direction: column;
+    width: 500px;
+    height: 350px;
+    justify-content: space-between;
 }
 
 .column{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-around;
-    height: 19vh;
+    height: 10vh;
 }
 
 .btn-submit, a{
@@ -89,7 +89,7 @@ input{
     display: flex;
     flex-direction: row;
     height: 10vh;
-    width: 30%;
+    width: 250px;
     justify-content: space-between;
     align-items: end;
 }

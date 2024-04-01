@@ -2,10 +2,10 @@
 @section('content')
     <section>
         <div class="container">
-            <form action="/contato/{{$contato->id}}/update" method="POST">
+            <form action="/produto/{{$produto->id}}/update" method="POST">
             @csrf
             @method('PUT')
-                <h1>Editar contatos</h1>
+                <h1>Editar produtos</h1>
                 @if($errors->any)
                 <div>
                     <ul>
@@ -19,27 +19,27 @@
                     <div class="column">
                         <div class="subcolumn">
                             <label for="form-label">Nome:</label>
-                            <input type="text" value="{{ $contato->nome}}" placeholder="Insira o nome" class="form-control" name="nome" id="nome">
+                            <input type="text" value="{{ $produto->nome}}" placeholder="Insira o nome" class="form-control" name="nome" id="nome">
                         </div>
                         <div class="subcolumn">    
-                            <label for="form-label">Email:</label>
-                            <input type="text" value="{{ $contato->email}}" placeholder="Insira o email" class="form-control" name="email" id="email">
+                            <label for="form-label">Quantidade:</label>
+                            <input type="text" value="{{ $produto->quantidade}}" placeholder="Insira a quantidade" class="form-control" name="quantidade" id="quantidade">
                         </div>     
                     </div>
                     <div class="column">
                         <div class="subcolumn">
-                            <label for="form-label">Telefone:</label>
-                            <input type="text" value="{{ $contato->telefone}}"placeholder="Insira o telefone" class="form-control" name="telefone" id="telefone">
+                            <label for="form-label">Valor:</label>
+                            <input type="text" value="{{ $produto->valor}}"placeholder="Insira o valor" class="form-control" name="valor" id="valor">
                         </div>
                         <div class="subcolumn">    
-                            <label for="form-label">CPF:</label>
-                            <input type="text" value="{{ $contato->cpf}}" placeholder="Insira o CPF" class="form-control" name="cpf" id="cpf">
+                            <label for="form-label">Descrição:</label>
+                            <input type="text" value="{{ $produto->descricao}}" placeholder="Insira a descrição" class="form-control" name="descricao" id="telefone">
                         </div>              
                     </div>
                 </div>
                 <div class="buttons">
                     <button class="btn-submit" type="submit">Editar</button>
-                    <a href="{{ route('contato.index')}}">Voltar</a>
+                    <a href="{{ route('produto.index')}}">Voltar</a>
                 </div>
             </form>
         </div>

@@ -33,8 +33,18 @@
                         <div class="subcolumn">    
                             <label for="form-label">CPF:</label>
                             <input type="text" placeholder="Insira o CPF" class="form-control" name="cpf" id="cpf">
-                        </div>              
-                    </div>
+                        </div>  
+                    </div> 
+                    <form action="{{ route('contato.select') }}" method="get" accept-charset="UTF-8">
+                        @foreach ($contatos as $contato)
+                        <div class="column">        
+                            <label for="exampleFormControlSelect1">Example select</label>
+                            <select class="form-control" id="exampleFormControlSelect1">
+                            <option>{{ $contato['cliente_id'] }}</option>
+                            </select>
+                        </div>
+                        @endforeach
+                    </form>
                 </div>
                 <div class="buttons">
                     <button class="btn-submit" type="submit" action="{{ route('contato.store')}}">Cadastrar</button>

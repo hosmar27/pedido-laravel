@@ -17,18 +17,19 @@ class ContatoController extends Controller
         $contatos = collect($query)->toArray();
 
         $keyword = $request->get('search');
-        $perPage = 5;
+        $perPage = 4;
 
         if(!empty($keyword)){
-            $contatos= contato::where('nome','LIKE',"%$keyword%")
+            $contatos= Contato::where('nome','LIKE',"%$keyword%")
                     ->orWhere('email','LIKE', "$keyword")
-                    ->orWhere('telefone','LIKE', "$keyword")
-                    ->orWhere('cpf','LIKE', "$keyword")
+                    ->orWhere('telefone','LIKE',"$keyword")
+                    ->orWhere('cpf','LIKE',"$keyword")
+                    ->orWhere('cliente_id','LIKE',"$keyword")
                     ->latest()->paginate($perPage);
         }else{
-            $contatos = contato::latest()->paginate($perPage);
+            $contatos = Contato::latest()->paginate($perPage);
         }
-        return view('contatos.index', ['contatos'=>$contatos])->with('i',(request()->input('page',1) -1) *5);
+        return view('contatos.index', ['contatos'=>$contatos])->with('i',(request()->input('page',1) -1) *4);
     }
 
     /**
@@ -55,6 +56,7 @@ class ContatoController extends Controller
         $contato->email = $request->email;
         $contato->telefone = $request->telefone;
         $contato->cpf = $request->cpf;
+        $contato->cliente_id = $request->cliente_id;
 
         $contato->save();
         return redirect()->route('contato.index')->with('sucess','Contato criado');
@@ -63,9 +65,12 @@ class ContatoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(contato $contato)
+    public function select (Contato $contatos)
     {
-        //
+        $query = DB::select("SELECT * FROM `contatos` WHERE contatos.cliente_id");
+        $contatos = collect($query)->toArray();
+
+        return view('contato.select', ['contatos'=>$contatos]);
     }
 
     /**
@@ -87,6 +92,7 @@ class ContatoController extends Controller
         $contato->email = $request->input('email');
         $contato->telefone = $request->input('telefone');
         $contato->cpf = $request->input('cpf');
+        $contato->cliente_id = $request->input('cliente_id');
 
         $contato->save();
         return redirect()->route('contato.index')->with('update','Contato atualizado');
@@ -95,7 +101,7 @@ class ContatoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(contato $contato)
+    public function destroy(Contato $contato)
     {
         Contato::find($contato->id)->delete();
         return redirect()->route('contato.index')->with('delete','Contato excluido'); 
