@@ -36,17 +36,20 @@ label{
 
 .row{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     width: 500px;
     height: 350px;
     justify-content: space-between;
+    align-items: center;
+    gap: 5px;
 }
 
 .column{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-around;
-    height: 10vh;
+    height: 30vh;
+    align-content: space-around ;
 }
 
 .btn-submit, a{
@@ -74,9 +77,15 @@ a:hover, .btn-submit:hover{
     box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
 }
 
+.active-page{
+    background-color: #f1f1f1;
+    color: #8200E6;
+}
+
 th{
    color: #8200E6;
 }
+
 td{
     color: #8200E6;
 }

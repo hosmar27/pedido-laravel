@@ -23,7 +23,16 @@
                         <div class="subcolumn">    
                             <label for="form-label">Email:</label>
                             <input type="text" placeholder="Insira o email" class="form-control" name="email" id="email">
-                        </div>     
+                        </div>   
+                        <div class="subcolumn">  
+                        <label for="exampleFormControlSelect1">Cliente:</label>
+                            <select class="form-control" name="clientes_id">
+                                <option value="">Selecione</option>
+                                @foreach ($clientes as $cliente)
+                                <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="column">
                         <div class="subcolumn">
@@ -34,18 +43,8 @@
                             <label for="form-label">CPF:</label>
                             <input type="text" placeholder="Insira o CPF" class="form-control" name="cpf" id="cpf">
                         </div>  
+                        <div class="subcolumn" style="background-color:#f1f1f1; width:100%; height:8vh"></div>
                     </div> 
-                    <form action="{{ route('contato.select') }}" method="get" accept-charset="UTF-8">
-                        @foreach ($contatos as $contato)
-                        <div class="column">        
-                            <label for="exampleFormControlSelect1">Example select</label>
-                            <select class="form-control" id="exampleFormControlSelect1">
-                            <option>{{ $contato['cliente_id'] }}</option>
-                            </select>
-                        </div>
-                        @endforeach
-                    </form>
-                </div>
                 <div class="buttons">
                     <button class="btn-submit" type="submit" action="{{ route('contato.store')}}">Cadastrar</button>
                     <a href="{{ route('contato.index')}}">Voltar</a>

@@ -7,6 +7,7 @@
         <div class="column">
             <h1>Lista de clientes</h1>
             <form method="GET" action="{{ route('cliente.index') }}" accept-charset="UTF-8" role="search">
+                @csrf
                 <div class="table-search" style="width: 350px;display:flex;flex-direction:row">
                     <div>
                         <button class="btn-submit" style="width: 100px;height:35px">
@@ -44,7 +45,7 @@
                 @endforeach
             </table>
             <div class="buttons">
-                <a href="{{ route('cliente.create')}}" class="btn-submit" style="width: 150px;">Cadastrar</button></a>
+                <a href="{{ route('cliente.create')}}" class="btn-submit" style="width: 150px;">Cadastrar</a>
                 <div class="table-paginate">
                     {{$clientes->links('layouts.pagination')}}
                 </div>

@@ -14,6 +14,7 @@
             <div class="column">
                 <h1>Lista de Contatos</h1>
                 <form method="GET" action="{{ route('contato.index') }}" accept-charset="UTF-8" role="search">
+                    @csrf
                     <div class="table-search" style="width: 350px;display:flex;flex-direction:row">
                         <div>
                             <button class="btn-submit" style="width: 100px;height:35px">
@@ -29,6 +30,7 @@
                     <tr>
                         <th>Nome</th>
                         <th>Email</th>
+                        <th>Cliente</th>
                         <th>Telefone</th>
                         <th>CPF</th>
                         <th>Excluir/Editar</th>
@@ -36,7 +38,8 @@
                     @foreach ($contatos as $contato)
                     <tr> 
                         <td>{{$contato->nome}}</td>
-                        <td>{{$contato->email}}</td>
+                        <td>{{ Str::limit($contato->email, 20) }}</td>
+                        <td>{{ Str::limit($contato->clientes_id, 20) }}</td>
                         <td>{{$contato->telefone}}</td>
                         <td>{{$contato->cpf}}</td>
                         <td class="action">

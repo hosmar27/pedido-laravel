@@ -26,8 +26,6 @@ Route::get('/cliente/{id}/destroy',[ClienteController::class,'destroy']);
 
 Route::resource('contato', ContatoController::class);
 
-Route::get('/contato/select', [ContatoController::class,'select']);
-
 Route::get('/contato/{id}/edit',[ContatoController::class,'edit']);
 Route::put('/contato/{id}/update',[ContatoController::class,'update']);
 

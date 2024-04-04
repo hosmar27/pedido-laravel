@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
 use App\Models\Contato;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,7 @@ class ContatoController extends Controller
                     ->orWhere('email','LIKE', "$keyword")
                     ->orWhere('telefone','LIKE',"$keyword")
                     ->orWhere('cpf','LIKE',"$keyword")
-                    ->orWhere('cliente_id','LIKE',"$keyword")
+                    ->orWhere('clientes_id','LIKE',"$keyword")
                     ->latest()->paginate($perPage);
         }else{
             $contatos = Contato::latest()->paginate($perPage);
@@ -37,7 +38,9 @@ class ContatoController extends Controller
      */
     public function create()
     {
-        return view('contatos.create');
+        $query = DB::select("SELECT * FROM `clientes` WHERE deleted_at IS null");
+        $clientes = collect($query)->toArray();
+        return view('contatos.create', ['clientes'=>$clientes]);
     }
 
     /**
@@ -56,21 +59,10 @@ class ContatoController extends Controller
         $contato->email = $request->email;
         $contato->telefone = $request->telefone;
         $contato->cpf = $request->cpf;
-        $contato->cliente_id = $request->cliente_id;
+        $contato->clientes_id = $request->clientes_id;
 
         $contato->save();
         return redirect()->route('contato.index')->with('sucess','Contato criado');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function select (Contato $contatos)
-    {
-        $query = DB::select("SELECT * FROM `contatos` WHERE contatos.cliente_id");
-        $contatos = collect($query)->toArray();
-
-        return view('contato.select', ['contatos'=>$contatos]);
     }
 
     /**
@@ -79,7 +71,9 @@ class ContatoController extends Controller
     public function edit($id)
     {
         $contato = Contato::findOrFail($id);
-        return view('contatos.edit',['contato' => $contato]);
+        $query = DB::select("SELECT * FROM `clientes` WHERE deleted_at IS null");
+        $clientes = collect($query)->toArray();
+        return view('contatos.edit',['contato' => $contato],['clientes' => $clientes]);
     }
 
     /**
@@ -92,7 +86,7 @@ class ContatoController extends Controller
         $contato->email = $request->input('email');
         $contato->telefone = $request->input('telefone');
         $contato->cpf = $request->input('cpf');
-        $contato->cliente_id = $request->input('cliente_id');
+        $contato->clientes_id = $request->input('clientes_id');
 
         $contato->save();
         return redirect()->route('contato.index')->with('update','Contato atualizado');
