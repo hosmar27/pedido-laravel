@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('clientes_id')->constrained();
-            $table->foreignId('produtos_id')->constrained();
-            $table->float('valor')->nullable();
+            $table->foreignId('contato_id');
+            $table->foreignId('cliente_id');
             $table->timestamps();
         });
     }

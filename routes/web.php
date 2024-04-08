@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\PedidoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,3 +39,10 @@ Route::get('/produto/{id}/edit',[ProdutoController::class,'edit']);
 Route::put('/produto/{id}/update',[ProdutoController::class,'update']);
 
 Route::get('/produto/{id}/destroy',[ProdutoController::class,'destroy']);
+
+Route::resource('pedido', PedidoController::class);
+
+Route::get('/pedido/{id}/edit',[PedidoController::class,'edit']);
+Route::put('/pedido/{id}/update',[PedidoController::class,'update']);
+
+Route::get('/pedido/{id}/destroy',[PedidoController::class,'destroy']);

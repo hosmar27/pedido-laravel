@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\contato;
 use App\Models\Produto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Mockery\Matcher\Contains;
 
 class ProdutoController extends Controller
 {

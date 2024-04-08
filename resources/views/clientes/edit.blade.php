@@ -3,7 +3,6 @@
     <section>
         <div class="container">
             <form action="/cliente/{{$cliente->id}}/update" method="POST">
-            @csrf
             @method('PUT')
                 <h1>Editar Clientes</h1>
                 @if($errors->any)

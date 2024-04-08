@@ -2,17 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\pedido;
+use App\Models\Pedido;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PedidoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = DB::select("SELECT * FROM `pedidos` WHERE pedidos.deleted_at IS null");
+        $pedidos = collect($query)->toArray();
+
+        $keyword = $request->get('search');
+        $perPage = 4;
+
+        if(!empty($keyword)) {
+            $pedidos = Pedido::where('id','LIKE',"%$keyword%")
+            ->orWhere('clientes_id','LIKE',"$keyword")
+            ->orWhere('pedidos_produtos_id','LIKE',"$keyword");
+        }
     }
 
     /**
@@ -20,7 +31,7 @@ class PedidoController extends Controller
      */
     public function create()
     {
-        //
+        return view('pedidos.create');
     }
 
     /**
@@ -28,7 +39,18 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'clientes_id' => 'required',
+            'contatos_id' => 'required',
+        ]);
+
+        $pedido = new Pedido();
+        
+        $pedido->clientes_id = $request->clientes_id;
+        $pedido->contatos_id = $request->produtos_id;
+
+        $pedido->save();
+        return redirect('/pedido')->with('sucess','Pedido criado');
     }
 
     /**
