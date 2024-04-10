@@ -24,7 +24,11 @@
 
         <!-- Alert -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        
+
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="http://lab.iamrohit.in/js/location.js"></script>
+
         @vite(['resources/css/app.css','resources/js/app.js'])
     </head>
     <body>

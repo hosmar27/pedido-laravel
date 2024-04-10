@@ -7,5 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class pedido extends Model
 {
-    use HasFactory;
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class);
+    }
+
+    public function contato()
+    {
+        return $this->belongsTo(Contato::class);
+    }
 }

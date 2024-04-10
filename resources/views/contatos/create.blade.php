@@ -27,7 +27,7 @@
                         <div class="subcolumn">  
                         <label for="exampleFormControlSelect1">Cliente:</label>
                             <select class="form-control" name="clientes_id">
-                                <option value="" disabled selected>Selecione</option>
+                                <option value="" disabled selected hidden>Selecione</option>
                                 @foreach ($clientes as $cliente)
                                 <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
                                 @endforeach

@@ -14,44 +14,49 @@
                     </ul>
                 </div>
                 @endif
-                <div class="row">
-                    <div class="column">
-                        <div class="subcolumn">
+                    <div class="column" style="display: flex;flex-direction:row">
+                        <div class="subcolumn" style="width: 20%;">
                             <label for="form-label">Cliente:</label>
-                            <select class="form-control" name="cliente_id">
+                            <select id="cliente_id" class="form-control" name="cliente_id">
                                 <option value="" disabled selected>Selecione</option>
-                                @foreach ($clientes as $cliente)
-                                    <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
+                                @foreach ($clientes as $data)
+                                    <option value="{{ $key }}">{{ $value }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="subcolumn">    
-                            <label for="form-label">CNPJ:</label>
-                            <select class="form-control" name="cliente_id">
-                                <option value="" disabled selected>Selecione</option>
-                                @foreach ($produtos as $produtos)
-                                    <option value="{{ $produto->id }}">{{ $cliente->nome }}</option>
-                                @endforeach
+                        <div class="subcolumn" style="width: 20%;">    
+                            <label for="form-label">Contato:</label>
+                            <select id="contato_id" class="form-control" name="contato_id">
                             </select>
                         </div>     
+                        <div class="subcolumn" style="width:20%;display:flex"></div>
                     </div>
-                    <div class="column">
-                        <div class="subcolumn">
-                            <label for="form-label">Endereço:</label>
-                            <input type="text" placeholder="Insira o endereço" class="form-control" name="endereco" id="endereco">
-                        </div>
-                        <div class="subcolumn">    
-                            <label for="form-label">Telefone:</label>
-                            <input type="text" placeholder="Insira o telefone" class="form-control" name="telefone" id="telefone">
-                        </div>              
-                    </div>
-                </div>
                 <div class="buttons">
                     <button class="btn-submit" type="submit" action="{{ route('pedido.store')}}">Cadastrar</button>
                     <a href="{{ route('pedido.index')}}">Voltar</a>
                 </div>
             </form>
         </div>
-        
-    </section>
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $('#cliente_id').on('change', function() {
+                var clienteID = $(this).val();
+                if(clienteID) {
+                    $.ajax({
+                        url: '/pedido/contato/'+clienteID,
+                        type: "GET",
+                        dataType: "json",
+                        success:function(data) {                      
+                            $('#contato_id').empty();
+                            $.each(data, function(key, value) {
+                                $('#contato').append('<option value="'+ key +'">'+ value +'</option>');
+                            });
+                        }
+                    });
+                } else {
+                    $('#contato').empty();
+                }
+            });
+        });
+    </script>
 @endsection

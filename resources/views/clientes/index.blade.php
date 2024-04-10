@@ -15,7 +15,7 @@
                         </button>
                     </div>
                     <div class="relative">
-                        <input class="search-input" type="text" name="search" placeholder=" Digite aqui..." value="{{ request('search') }}" style="border-radius: 20px;border-color:#8200E6;width: 175px;height:35px">
+                        <input class="search-input" type="text" name="search" placeholder=" Digite aqui..." value="{{ request('search') }}">
                     </div>
                 </div>
             </form>

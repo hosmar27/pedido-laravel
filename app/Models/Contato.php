@@ -10,5 +10,8 @@ class contato extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'contatos';
+
+
     protected $guarded = [];
 }
