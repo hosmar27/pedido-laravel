@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cliente;
-use App\Models\Contato;
 use App\Models\Pedido;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,24 +15,24 @@ class PedidoController extends Controller
     {
         $query = DB::select("SELECT * FROM `pedidos` WHERE pedidos.deleted_at IS null");
         $pedidos = collect($query)->toArray();
-        $query = DB::select("SELECT * FROM `clientes` WHERE clientes.deleted_at IS null");
+        $query = DB::select("SELECT clientes.id,clientes.nome FROM `clientes` INNER JOIN `pedidos`ON clientes.id = pedidos.cliente_id WHERE clientes.deleted_at IS null");
         $clientes = collect($query)->toArray();
-        $query = DB::select("SELECT * FROM `contatos` WHERE contatos.deleted_at IS null");
+        $query = DB::select("SELECT contatos.nome, contatos.id FROM `contatos` INNER JOIN `clientes` ON clientes.id = contatos.clientes_id AND contatos.deleted_at IS null;");
         $contatos = collect($query)->toArray();
 
         $keyword = $request->get('search');
-        $perPage = 4;
+        $perPage = 2;
 
-        if(!empty($keyword)) {
-            $pedidos = Pedido::where('id','LIKE',"%$keyword%")
-            ->orWhere('cliente_id','LIKE',"$keyword")
-            ->orWhere('pedido_id','LIKE',"$keyword")
-            ->latest()->paginate($perPage);
-        }else{
+        if (!empty($keyword)) {
+            $pedidos = Pedido::where('id', 'LIKE', "%$keyword%")
+                ->orWhere('cliente_id', 'LIKE', "$keyword")
+                ->orWhere('pedido_id', 'LIKE', "$keyword")
+                ->latest()->paginate($perPage);
+        } else {
             $pedidos = Pedido::latest()->paginate($perPage);
         }
 
-        return view('pedidos.index', ['pedidos'=>$pedidos], ['clientes'=>$clientes], ['contatos'=>$contatos])->with('i',(request()->input('page',1) -1) *4);
+        return view('pedidos.index', compact('clientes', 'contatos', 'pedidos'))->with('i', (request()->input('page', 1) - 1) * 2);
     }
 
     /**
@@ -45,9 +42,9 @@ class PedidoController extends Controller
     {
         $query = DB::select("SELECT * FROM `clientes` WHERE deleted_at IS null");
         $clientes = collect($query)->toArray();
-        $query = DB::select("SELECT * FROM `contatos` INNER JOIN `clientes` ON clientes.id = contatos.clientes_id AND contatos.deleted_at IS null;");
+        $query = DB::select("SELECT contatos.nome, contatos.id FROM `contatos` INNER JOIN `clientes` ON clientes.id = contatos.clientes_id AND contatos.deleted_at IS null;");
         $contatos = collect($query)->toArray();
-        return view('pedidos.create', ['clientes'=>$clientes], ['contatos'=>$contatos]);
+        return view('pedidos.create', ['clientes' => $clientes], ['contatos' => $contatos]);
     }
 
     /**
@@ -56,12 +53,12 @@ class PedidoController extends Controller
     public function store(Request $request)
     {
         $pedido = new Pedido();
-        
+
         $pedido->cliente_id = $request->cliente_id;
         $pedido->contato_id = $request->contato_id;
 
         $pedido->save();
-        return redirect('/pedido')->with('sucess','Pedido criado');
+        return redirect('/pedido')->with('sucess', 'Pedido criado');
     }
 
     public function edit($id)
@@ -69,19 +66,7 @@ class PedidoController extends Controller
         $pedido = Pedido::findOrFail($id);
         $query = DB::select("SELECT * FROM `pedidos` WHERE deleted_at IS null");
         $pedido = collect($query)->toArray();
-        return view('pedidos.edit',['pedido' => $pedido]);
-    }
-
-    public function fetchCliente()
-    {
-        $data['clientes'] = Cliente::get(["nome","id"]);
-        return view('pedidos.create', $data);
-    }
-
-    public function fetchContato(Request $request)
-    {
-        $data['contatos'] = Contato::where("deleted_at", $request->contato_id)->get(["nome","id"]);
-        return response()->json($data);
+        return view('pedidos.edit', ['pedido' => $pedido]);
     }
 
     /**

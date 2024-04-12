@@ -47,5 +47,5 @@ Route::put('/pedido/{id}/update',[PedidoController::class,'update']);
 
 Route::get('/pedido/{id}/destroy',[PedidoController::class,'destroy']);
 
-Route::get('/pedido/create',[PedidoController::class, 'fetchContato']);
-Route::get('/pedido/create',[PedidoController::class, 'fetchCliente']);
+Route::post('/pedidos/create/{id}',[ClienteController::class, 'getContato']);
+Route::get('/pedidos/create',[ClienteController::class, 'getCliente']);

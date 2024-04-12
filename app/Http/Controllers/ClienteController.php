@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Contato;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -84,7 +85,7 @@ class ClienteController extends Controller
         $cliente->telefone = $request->input('telefone');  
         
         $cliente->save();       // Salvou os novos dados no DB
-        return redirect()->route('cliente.index')->with('update','Cliente atualizado');
+        return redirect('/cliente')->with('update','Cliente atualizado');
     }
 
     /**
@@ -93,8 +94,21 @@ class ClienteController extends Controller
     public function destroy(Cliente $cliente)
     {
         Cliente::find($cliente->id)->delete();
-        return redirect()->route('cliente.index')->with('delete','Cliente excluido');
+        return redirect()->route('/cliente')->with('delete','Cliente excluido');
     }
+
+    public function fetchCliente()
+    {
+        $data['clientes'] = Cliente::get(["nome","id"]);
+        return view('pedidos.create', $data);
+    }
+
+    public function fetchContato(Request $request)
+    {
+        $data['contatos'] = Contato::where("deleted_at", $request->contato_id)->get(["nome","id"]);
+        return response()->json($data);
+    }
+
     /**
      * Display the specified resource.
      */

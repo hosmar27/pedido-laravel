@@ -21,8 +21,8 @@
                             <input type="text" placeholder="Insira o nome" class="form-control" name="nome" id="nome">
                         </div>
                         <div class="subcolumn">    
-                            <label for="form-label">Quantidade:</label>
-                            <input type="text" placeholder="Insira o quantidade" class="form-control" name="quantidade" id="quantidade">
+                            <label for="form-label">Estoque:</label>
+                            <input type="text" placeholder="Insira o estoque" class="form-control" name="estoque" id="estoque">
                         </div>     
                     </div>
                     <div class="column">

@@ -21,7 +21,7 @@
                 <table class="table table-hover">
                     <tr>
                         <th>Nome</th>
-                        <th>Quantidade</th>
+                        <th>Estoque</th>
                         <th>Valor</th>
                         <th>Descrição</th>
                         <th>Excluir/Editar</th>
@@ -29,16 +29,12 @@
                     @foreach ($produtos as $produto)
                     <tr> 
                         <td>{{$produto->nome}}</td>
-                        <td>{{$produto->quantidade}}</td>
+                        <td>{{$produto->estoque}}</td>
                         <td>{{$produto->valor}}</td>
                         <td>{{$produto->descricao}}</td>
                         <td class="action">
                             <a href="{{ route('produto.edit', $produto->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
-                            <form method="post" action="{{ route('produto.destroy', $produto->id) }}">
-                                @csrf
-                                @method('delete')
-                                    <input type="submit" value="Excluir" class="btn-submit" style="width: 100px;">
-                            </form>
+                            <button onclick="sureDelete"></button>
                         </td>
                     </tr>
                     @endforeach
@@ -52,6 +48,22 @@
             </div>
         </div>
     </section>
+
+<script>
+    public function deleteConfirm{
+        swal({
+            title: "Are you sure?",
+            text: "You will not be able to recover this imaginary file!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel plx!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        })
+    }
+</script>
     </script>
 @if ($message = Session::get('delete'))
     <script type="text/javascript">

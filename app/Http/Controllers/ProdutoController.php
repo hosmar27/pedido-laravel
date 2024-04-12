@@ -21,7 +21,7 @@ class ProdutoController extends Controller
 
         if(!empty($keyword)){
             $produtos = Produto::where('nome', 'LIKE',"%$keyword%")
-                ->orWhere('quantidade','LIKE',"$keyword")
+                ->orWhere('estoque','LIKE',"$keyword")
                 ->orWhere('valor','LIKE',"$keyword")
                 ->orWhere('descricao','LIKE',"$keyword")
                 ->latest()->paginate($perPage);
@@ -46,14 +46,14 @@ class ProdutoController extends Controller
     {
         $request->validate([
             'nome' => 'required',
-            'quantidade' => 'required',
+            'estoque' => 'required',
             'valor' => 'required',
         ]);
 
         $produto = new Produto();
 
         $produto->nome = $request->nome;
-        $produto->quantidade = $request->quantidade;
+        $produto->estoque = $request->estoque;
         $produto->valor = $request->valor;
         $produto->descricao = $request->descricao;
 
@@ -85,12 +85,12 @@ class ProdutoController extends Controller
     {
         $produto = Produto::find($request->id);
         $produto->nome = $request->input('nome');
-        $produto->quantidade = $request->input('quantidade');
+        $produto->estoque = $request->input('estoque');
         $produto->valor = $request->input('valor');
         $produto->descricao = $request->input('descricao');
 
         $produto->save();
-        return redirect('/produto')->with('update','Produto atualizado');
+        return redirect()->route('produto.index')->with('update','Produto atualizado');
     }
 
     /**
