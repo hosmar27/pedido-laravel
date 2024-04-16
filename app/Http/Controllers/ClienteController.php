@@ -38,7 +38,7 @@ class ClienteController extends Controller
      */
     public function create()
     {
-        return view(view: 'clientes.create');
+        return view('clientes.create');    
     }
 
     /**
@@ -69,7 +69,6 @@ class ClienteController extends Controller
     public function edit($id)
     {
         $cliente = Cliente::findOrFail($id);
-        //dd($cliente);
         return view('clientes.edit',['cliente'=>$cliente]);
     }
 
@@ -93,8 +92,8 @@ class ClienteController extends Controller
      */
     public function destroy(Cliente $cliente)
     {
-        Cliente::find($cliente->id)->delete();
-        return redirect()->route('/cliente')->with('delete','Cliente excluido');
+        $cliente = Cliente::find($cliente->id)->delete();
+        return redirect('/cliente')->with('delete','Cliente excluido');
     }
 
     public function fetchCliente()

@@ -68,7 +68,7 @@
             }
         });
         Toast3.fire({
-            icon: "delete",
+            icon: "sucess",
             title: "Cliente excluido"
         });
     </script>
@@ -106,7 +106,7 @@
             }
         });
         Toast2.fire({
-            icon: "update",
+            icon: "sucess",
             title: "Cliente atualizado"
         });
     </script>

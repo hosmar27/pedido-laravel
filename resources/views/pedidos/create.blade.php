@@ -19,7 +19,7 @@
                             <label for="form-label">Cliente:</label>
                             <select id="cliente_id" class="form-control" name="cliente_id">
                                 <option value="" disabled selected>Select cliente</option>
-                                @foreach ($clientes as $data)
+                                @foreach ($data as $data)
                                     <option value="{{$data->id}}">{{$data->nome}}</option>
                                 @endforeach
                             </select>
@@ -45,7 +45,7 @@
 
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
     $(document).ready(function(){
-    $('#cliente_id').on('change', function () {
+    $('#cliente_id').on('change', function() {
         var idCliente = this.value;
         $("#contato_id").html('');
         $.ajax({

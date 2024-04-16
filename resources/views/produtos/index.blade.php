@@ -34,7 +34,11 @@
                         <td>{{$produto->descricao}}</td>
                         <td class="action">
                             <a href="{{ route('produto.edit', $produto->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
-                            <button onclick="sureDelete"></button>
+                            <form method="post" action="{{ route('produto.destroy', $produto->id) }}">
+                                @csrf
+                                @method('delete')
+                                    <input type="submit" value="Excluir" class="btn-submit" style="width: 100px;">
+                            </form>                        
                         </td>
                     </tr>
                     @endforeach
@@ -49,22 +53,6 @@
         </div>
     </section>
 
-<script>
-    public function deleteConfirm{
-        swal({
-            title: "Are you sure?",
-            text: "You will not be able to recover this imaginary file!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: "btn-danger",
-            confirmButtonText: "Yes, delete it!",
-            cancelButtonText: "No, cancel plx!",
-            closeOnConfirm: false,
-            closeOnCancel: false
-        })
-    }
-</script>
-    </script>
 @if ($message = Session::get('delete'))
     <script type="text/javascript">
         const Toast3 = Swal.mixin({

@@ -23,24 +23,17 @@
                 <tr>
                     <th>Cliente</th>
                     <th>Contato</th>
-                    <th>Planilha</th>
                     <th>Excluir/Editar</th>
-                    <th>Exemplo</th>
                 </tr>
                 <tr>
-                   
-                        @foreach ($clientes as $cliente)
-                            <td>{{$cliente->nome}}</td>
-                        @endforeach
-                        @foreach ($contatos as $contato)
-                            <td>{{$contato->nome}}</td>
-                        @endforeach
-                        <td>Exemplo</td>
+                    @foreach ($pedidos as $pedido)
+                        <td>{{$pedidos->clientes.nome}}</td>
+                        <td>{{$pedidos->contatos.nome}}</td>
                         <td class="action">
-                            <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
-                            <form action="{{ route('pedido.destroy', $pedido->id) }}" method="post">Delete</form>
+                        <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
+                        <form action="{{ route('pedido.destroy', $pedido->id) }}" method="post">Delete</form>
                         </td>
-                        <td>Exemplo</td>
+                    @endforeach
                 </tr>
             </table>
             <div class="buttons">

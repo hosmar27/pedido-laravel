@@ -71,8 +71,8 @@ class ContatoController extends Controller
     {
         $contato = Contato::findOrFail($id);
         $query = DB::select("SELECT * FROM `clientes` WHERE deleted_at IS null");
-        $clientes = collect($query)->toArray();
-        return view('contatos.edit',['contato' => $contato],['clientes' => $clientes]);
+        $cliente = collect($query)->toArray();
+        return view('contatos.edit',['contato' => $contato],['clientes' => $cliente]);
     }
 
     /**

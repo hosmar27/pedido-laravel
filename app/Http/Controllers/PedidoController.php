@@ -13,11 +13,14 @@ class PedidoController extends Controller
      */
     public function index(Request $request)
     {
-        $query = DB::select("SELECT * FROM `pedidos` WHERE pedidos.deleted_at IS null");
+        $query = DB::select("SELECT pedidos.id,cliente_id,contato_id,clientes.nome,contatos.nome 
+        FROM `pedidos`
+        JOIN `clientes` ON `pedidos`.ID = `clientes`.ID
+        JOIN `contatos` ON `contatos`.ID = `clientes`.ID"); //pedidos.cliente_id=clientes.nome pedidos.contato_id=contatos.nome 
         $pedidos = collect($query)->toArray();
-        $query = DB::select("SELECT clientes.id,clientes.nome FROM `clientes` INNER JOIN `pedidos`ON clientes.id = pedidos.cliente_id WHERE clientes.deleted_at IS null");
+        $query = DB::select("SELECT clientes.id, clientes.nome FROM `clientes` INNER JOIN `pedidos`ON clientes.id = pedidos.cliente_id WHERE pedidos.deleted_at AND clientes.deleted_at IS null");
         $clientes = collect($query)->toArray();
-        $query = DB::select("SELECT contatos.nome, contatos.id FROM `contatos` INNER JOIN `clientes` ON clientes.id = contatos.clientes_id AND contatos.deleted_at IS null;");
+        $query = DB::select("SELECT contatos.id, contatos.nome FROM `contatos` INNER JOIN `clientes`ON contatos.clientes_id = clientes.id WHERE clientes.deleted_at AND contatos.deleted_at IS null");
         $contatos = collect($query)->toArray();
 
         $keyword = $request->get('search');
@@ -32,7 +35,7 @@ class PedidoController extends Controller
             $pedidos = Pedido::latest()->paginate($perPage);
         }
 
-        return view('pedidos.index', compact('clientes', 'contatos', 'pedidos'))->with('i', (request()->input('page', 1) - 1) * 2);
+        return view('pedidos.index', ['pedidos' => $pedidos])->with('i', (request()->input('page', 1) - 1) * 2);
     }
 
     /**
@@ -69,11 +72,22 @@ class PedidoController extends Controller
         return view('pedidos.edit', ['pedido' => $pedido]);
     }
 
+    public function update(Request $request, Pedido $pedido)
+    {
+        $pedido = Pedido::find($request->id);
+        $pedido->cliente = $request->select('cliente_id');
+        $pedido->cliente = $request->select('contato_id');
+
+        $pedido->save();
+        return redirect()->route('pedido.index')->with('update','Contato atualizado');
+    }
+
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(pedido $pedido)
     {
-        //
+        Pedido::find($pedido->id)->delete();
+        return redirect()->route('contato.index')->with('delete','Contato excluido');
     }
 }
