@@ -13,15 +13,14 @@ class PedidoController extends Controller
      */
     public function index(Request $request)
     {
-        $query = DB::select("SELECT pedidos.id,cliente_id,contato_id,clientes.nome,contatos.nome 
+        $query = DB::select("SELECT pedidos.id, cliente_id, contato_id, clientes.nome as cliente_nome, contatos.nome as contato_nome 
         FROM `pedidos`
-        JOIN `clientes` ON `pedidos`.ID = `clientes`.ID
-        JOIN `contatos` ON `contatos`.ID = `clientes`.ID"); //pedidos.cliente_id=clientes.nome pedidos.contato_id=contatos.nome 
+        JOIN `clientes` ON pedidos.cliente_id = clientes.id 
+        JOIN `contatos` ON contatos.id = pedidos.contato_id 
+        WHERE pedidos.deleted_at IS NULL
+        ORDER BY pedidos.id
+        ");
         $pedidos = collect($query)->toArray();
-        $query = DB::select("SELECT clientes.id, clientes.nome FROM `clientes` INNER JOIN `pedidos`ON clientes.id = pedidos.cliente_id WHERE pedidos.deleted_at AND clientes.deleted_at IS null");
-        $clientes = collect($query)->toArray();
-        $query = DB::select("SELECT contatos.id, contatos.nome FROM `contatos` INNER JOIN `clientes`ON contatos.clientes_id = clientes.id WHERE clientes.deleted_at AND contatos.deleted_at IS null");
-        $contatos = collect($query)->toArray();
 
         $keyword = $request->get('search');
         $perPage = 2;
@@ -52,7 +51,7 @@ class PedidoController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     */
+    */
     public function store(Request $request)
     {
         $pedido = new Pedido();

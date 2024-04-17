@@ -19,22 +19,24 @@
                     </div>
                 </div>
             </form>
-            <table class="table table-hover" style="display:flex;flex-direction:column">
+            <table class="table table-hover">
                 <tr>
+                    <th>ID</th>
                     <th>Cliente</th>
                     <th>Contato</th>
                     <th>Excluir/Editar</th>
                 </tr>
-                <tr>
-                    @foreach ($pedidos as $pedido)
-                        <td>{{$pedidos->clientes.nome}}</td>
-                        <td>{{$pedidos->contatos.nome}}</td>
+                @foreach ($pedidos as $pedido)
+                    <tr>
+                        <td>{{$pedido->id}}</td>
+                        <td>{{$pedido->cliente->nome}}</td>
+                        <td>{{$pedido->contato->nome}}</td>
                         <td class="action">
                         <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
                         <form action="{{ route('pedido.destroy', $pedido->id) }}" method="post">Delete</form>
                         </td>
-                    @endforeach
-                </tr>
+                    </tr>
+                @endforeach
             </table>
             <div class="buttons">
                 <a href="{{ route('pedido.create') }}" class="btn-submit" style="width: 100px;">Cadastrar</a>
