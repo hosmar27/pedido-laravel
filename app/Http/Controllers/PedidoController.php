@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pedido;
+use App\Models\Cliente;
+use App\Models\Contato;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -23,7 +25,7 @@ class PedidoController extends Controller
         $pedidos = collect($query)->toArray();
 
         $keyword = $request->get('search');
-        $perPage = 2;
+        $perPage = 3;
 
         if (!empty($keyword)) {
             $pedidos = Pedido::where('id', 'LIKE', "%$keyword%")
@@ -34,7 +36,7 @@ class PedidoController extends Controller
             $pedidos = Pedido::latest()->paginate($perPage);
         }
 
-        return view('pedidos.index', ['pedidos' => $pedidos])->with('i', (request()->input('page', 1) - 1) * 2);
+        return view('pedidos.index', ['pedidos' => $pedidos])->with('i', (request()->input('page', 1) - 1) * 3);
     }
 
     /**
@@ -81,12 +83,24 @@ class PedidoController extends Controller
         return redirect()->route('pedido.index')->with('update','Contato atualizado');
     }
 
+    public function fetchCliente(Request $request)
+    {
+        $data['clientes'] = Cliente::where("deleted_at", $request->cliente_id)->get();
+        return view('pedidos.create', $data);
+    }
+
+    public function fetchContato(Request $request)
+    {
+        $data['contatos'] = Contato::where("deleted_at", $request->contato_id)->get();
+        return response()->json($data);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(pedido $pedido)
+    public function destroy(Pedido $pedido)
     {
         Pedido::find($pedido->id)->delete();
-        return redirect()->route('contato.index')->with('delete','Contato excluido');
+        return redirect()->route('pedido.index')->with('delete','Contato excluido');
     }
 }

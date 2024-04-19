@@ -96,18 +96,6 @@ class ClienteController extends Controller
         return redirect('/cliente')->with('delete','Cliente excluido');
     }
 
-    public function fetchCliente()
-    {
-        $data['clientes'] = Cliente::get(["nome","id"]);
-        return view('pedidos.create', $data);
-    }
-
-    public function fetchContato(Request $request)
-    {
-        $data['contatos'] = Contato::where("deleted_at", $request->contato_id)->get(["nome","id"]);
-        return response()->json($data);
-    }
-
     /**
      * Display the specified resource.
      */

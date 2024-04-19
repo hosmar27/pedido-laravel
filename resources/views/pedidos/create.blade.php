@@ -19,8 +19,8 @@
                             <label for="form-label">Cliente:</label>
                             <select id="cliente_id" class="form-control" name="cliente_id">
                                 <option value="" disabled selected>Select cliente</option>
-                                @foreach ($data as $data)
-                                    <option value="{{$data->id}}">{{$data->nome}}</option>
+                                @foreach ($clientes as $cliente)
+                                    <option value="{{$cliente->id}}">{{$cliente->nome}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -49,7 +49,7 @@
         var idCliente = this.value;
         $("#contato_id").html('');
         $.ajax({
-            url: '{{url("cliente/fetchContato")}}'+idCliente,
+            url: '{{url("pedido/fetchContato")}}'+idCliente,
             type: "POST",
             data: { cliente_id: idCliente},
             success: function (result) {

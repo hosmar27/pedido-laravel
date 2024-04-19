@@ -13,14 +13,19 @@ class ContatoController extends Controller
      */
     public function index(Request $request)
     {
-        $query = DB::select("SELECT * FROM `contatos` WHERE contatos.deleted_at IS null");
+        $query = DB::select("SELECT contatos.nome, contatos.id AS contato_id, contatos.clientes_id, contatos.telefone, contatos.cpf, contatos.deleted_at, clientes.nome, clientes.id AS cliente_id, clientes.deleted_at FROM `contatos`
+        JOIN `clientes` ON contatos.clientes_id = clientes.id
+        WHERE contatos.deleted_at IS NULL 
+        AND clientes.deleted_at IS NULL
+        ORDER BY contato_id
+        ");
         $contatos = collect($query)->toArray();
 
         $keyword = $request->get('search');
         $perPage = 4;
 
         if(!empty($keyword)){
-            $contatos= Contato::where('nome','LIKE',"%$keyword%")
+            $contatos = Contato::where('nome','LIKE',"%$keyword%")
                     ->orWhere('email','LIKE', "$keyword")
                     ->orWhere('telefone','LIKE',"$keyword")
                     ->orWhere('cpf','LIKE',"$keyword")

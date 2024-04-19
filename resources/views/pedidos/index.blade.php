@@ -26,6 +26,7 @@
                     <th>Contato</th>
                     <th>Excluir/Editar</th>
                 </tr>
+                @dd($pedidos)
                 @foreach ($pedidos as $pedido)
                     <tr>
                         <td>{{$pedido->id}}</td>
@@ -33,8 +34,12 @@
                         <td>{{$pedido->contato->nome}}</td>
                         <td class="action">
                         <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
-                        <form action="{{ route('pedido.destroy', $pedido->id) }}" method="post">Delete</form>
-                        </td>
+                        <form action="{{route('pedido.destroy', $pedido->id)}}" method="post">
+                            @csrf
+                            @method('delete')
+                            <input type="submit" value="Excluir" class="btn-submit" style="width: 100px;">
+                        </form>
+                    </td>
                     </tr>
                 @endforeach
             </table>

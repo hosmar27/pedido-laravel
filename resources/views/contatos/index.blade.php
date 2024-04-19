@@ -32,7 +32,7 @@
                 <tr>
                     <td>{{$contato->nome}}</td>
                     <td>{{ Str::limit($contato->email, 20) }}</td>
-                    <td>{{ Str::limit($contato->clientes_id, 20) }}</td>
+                    <td>{{$contato->cliente->nome}}</td>
                     <td>{{$contato->telefone}}</td>
                     <td>{{$contato->cpf}}</td>
                     <td class="action">
