@@ -13,13 +13,12 @@ class ContatoController extends Controller
      */
     public function index(Request $request)
     {
-        $query = DB::select("SELECT contatos.nome, contatos.id AS contato_id, contatos.clientes_id, contatos.telefone, contatos.cpf, contatos.deleted_at, clientes.nome, clientes.id AS cliente_id, clientes.deleted_at FROM `contatos`
-        JOIN `clientes` ON contatos.clientes_id = clientes.id
-        WHERE contatos.deleted_at IS NULL 
-        AND clientes.deleted_at IS NULL
-        ORDER BY contato_id
-        ");
-        $contatos = collect($query)->toArray();
+        $contatosQuery = Contato::query()
+            ->select('contatos.nome', 'contatos.id', 'contatos.clientes_id', 'contatos.telefone', 'contatos.cpf', 'clientes.nome')
+            ->join('clientes', 'contatos.clientes_id', '=', 'clientes.id')
+            ->whereNull('contatos.deleted_at')
+            ->whereNull('clientes.deleted_at');
+        $contatos = collect($contatosQuery)->toArray();
 
         $keyword = $request->get('search');
         $perPage = 4;
@@ -101,7 +100,7 @@ class ContatoController extends Controller
      */
     public function destroy(Contato $contato)
     {
-        Contato::find($contato->id)->delete();
-        return redirect()->route('contato.index')->with('delete','Contato excluido'); 
+        $contato = Contato::find($contato->id)->delete();
+        return redirect('/contato')->with('delete','Contato excluido');
     }
 }
