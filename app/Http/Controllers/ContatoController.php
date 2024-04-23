@@ -103,4 +103,21 @@ class ContatoController extends Controller
         $contato = Contato::find($contato->id)->delete();
         return redirect('/contato')->with('delete','Contato excluido');
     }
+
+    public function get_by_cliente(Request $request)
+    {
+
+        if (!$request->cliente_id) {
+            $html = '<option value="">'.trans('global.pleaseSelect').'</option>';
+        } else {
+            $html = '';
+            $contatos     = Contato::where('cliente_id', $request->cliente_id)->get();
+            foreach ($contatos as $contato) {
+                $html .= '<option value="'.$contato->id.'">'.$contato->name.'</option>';
+            }
+        }
+
+        return response()->json(['html' => $html]);
+    }
+
 }

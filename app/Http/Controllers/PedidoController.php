@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pedido;
-use App\Models\Cliente;
-use App\Models\Contato;
+use App\Models\{Pedido, Cliente, Contato};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +13,7 @@ class PedidoController extends Controller
      */
     public function index(Request $request)
     {
-        $query = DB::select("SELECT pedidos.id, cliente_id, contato_id, clientes.nome as cliente_nome, contatos.nome as contato_nome 
+        $query = DB::select("SELECT pedidos.id, clientes.id, contatos.id, clientes.nome, contatos.nome 
         FROM `pedidos`
         JOIN `clientes` ON pedidos.cliente_id = clientes.id 
         JOIN `contatos` ON contatos.id = pedidos.contato_id 
@@ -44,11 +42,18 @@ class PedidoController extends Controller
      */
     public function create()
     {
-        $query = DB::select("SELECT * FROM `clientes` WHERE deleted_at IS null");
+        $query = DB::select('SELECT id,nome FROM `clientes` WHERE deleted_at IS null');
         $clientes = collect($query)->toArray();
-        $query = DB::select("SELECT contatos.nome, contatos.id FROM `contatos` INNER JOIN `clientes` ON clientes.id = contatos.clientes_id AND contatos.deleted_at IS null;");
+        $query = DB::table('contatos')->where('id','LIKE', 0);
         $contatos = collect($query)->toArray();
-        return view('pedidos.create', ['clientes' => $clientes], ['contatos' => $contatos]);
+        return view('pedidos.create', ['clientes' => $clientes, 'contatos' => $contatos]);
+    }
+
+    public function dropdown()
+    {
+        $query = DB::select("SELECT * FROM `pedidos` WHERE deleted_at IS null");
+        $contatos = collect($query)->toArray();
+        return response()->json($contatos);
     }
 
     /**
@@ -81,18 +86,6 @@ class PedidoController extends Controller
 
         $pedido->save();
         return redirect()->route('pedido.index')->with('update','Contato atualizado');
-    }
-
-    public function fetchCliente(Request $request)
-    {
-        $data['clientes'] = Cliente::where("deleted_at", $request->cliente_id)->get();
-        return view('pedidos.create', $data);
-    }
-
-    public function fetchContato(Request $request)
-    {
-        $data['contatos'] = Contato::where("deleted_at", $request->contato_id)->get();
-        return response()->json($data);
     }
 
     /**

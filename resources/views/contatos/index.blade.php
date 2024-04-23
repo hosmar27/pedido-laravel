@@ -31,7 +31,7 @@
                 @foreach ($contatos as $contato)
                 <tr>
                     <td>{{$contato->nome}}</td>
-                    <td>{{ Str::limit($contato->email, 20) }}</td>@dd($contato)
+                    <td>{{ Str::limit($contato->email, 20) }}</td>
                     <td>{{$contato->cliente_id}}</td>
                     <td>{{$contato->telefone}}</td>
                     <td>{{$contato->cpf}}</td>

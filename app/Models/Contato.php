@@ -12,6 +12,5 @@ class contato extends Model
 
     protected $table = 'contatos';
 
-
-    protected $guarded = [];
+    protected $fillable = ['cliente_id','nome'];
 }

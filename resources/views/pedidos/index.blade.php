@@ -30,7 +30,6 @@
                     <tr>
                         <td>{{$pedido->id}}</td>
                         <td>{{$pedido->cliente->nome}}</td>
-                        @dd($pedido)
                         <td>{{$pedido->contato->nome}}</td>
                         <td class="action">
                         <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
