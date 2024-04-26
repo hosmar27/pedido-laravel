@@ -53,7 +53,8 @@ class ContatoController extends Controller
     {
         $request->validate([
             'nome' => 'required',
-            'email' => 'required'
+            'email' => 'required',
+            'cliente_id' => 'required'
         ]);
 
         $contato = new Contato();
@@ -62,7 +63,7 @@ class ContatoController extends Controller
         $contato->email = $request->email;
         $contato->telefone = $request->telefone;
         $contato->cpf = $request->cpf;
-        $contato->clientes_id = $request->clientes_id;
+        $contato->cliente_id = $request->cliente_id;
 
         $contato->save();
         return redirect()->route('contato.index')->with('sucess','Contato criado');

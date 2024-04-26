@@ -6,6 +6,10 @@
 
         <title>Laravel</title>
 
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>  
+        <script src="http://lab.iamrohit.in/js/location.js"></script>
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -23,10 +27,6 @@
 
         <!-- Alert -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-        <!-- jQuery -->
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>  
-        <script src="http://lab.iamrohit.in/js/location.js"></script>
 
         @vite(['resources/css/app.css','resources/js/app.js'])
     </head>

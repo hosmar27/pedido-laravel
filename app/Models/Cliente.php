@@ -10,7 +10,5 @@ class Cliente extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'contatos';
-
     protected $fillable = ['id','nome'];
 }

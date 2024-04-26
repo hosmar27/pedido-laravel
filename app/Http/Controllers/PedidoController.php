@@ -44,15 +44,16 @@ class PedidoController extends Controller
     {
         $query = DB::select('SELECT id,nome FROM `clientes` WHERE deleted_at IS null');
         $clientes = collect($query)->toArray();
-        $query = DB::table('contatos')->where('id','LIKE', 0);
-        $contatos = collect($query)->toArray();
-        return view('pedidos.create', ['clientes' => $clientes, 'contatos' => $contatos]);
+        return view('pedidos.create', ['clientes' => $clientes]);
     }
 
-    public function dropdown()
+    public function fetchContatos(Request $request)
     {
-        $query = DB::select("SELECT * FROM `pedidos` WHERE deleted_at IS null");
-        $contatos = collect($query)->toArray();
+        dd('asd');
+        $contatos['contatos'] = Contato::where("cliente_id", $request->cliente_id)
+                                ->get(["name", "id"]);
+  
+                                
         return response()->json($contatos);
     }
 
