@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('content')
 <section>
+    <head>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+    </head>
     <div class="container">
         <form action="{{ route('pedido.store')}}" method="post">
             @csrf
@@ -16,9 +19,9 @@
             @endif
             <div class="column" style="display: flex;flex-direction:row">
                 <div class="subcolumn" style="width: 20%;">
-                    <label id="cliente_id" for="form-label">Cliente:</label>
-                    <select class="form-control" name="cliente_id" id="cliente_id">
-                        <option value="" disabled selected>Select cliente</option>
+                    <label id="cliente_id" for="clientes_id">Cliente:</label>
+                    <select class="form-control" name="cliente_id" id="clientes_id">
+                        <option value="" disabled selected>-- Cliente --</option>
 
                         @foreach ($clientes as $cliente)
                         <option value="{{$cliente->id}}">
@@ -28,8 +31,8 @@
                     </select>
                 </div>
                 <div class="subcolumn" style="width: 20%;">
-                    <label id="contato_id" for="form-label">Contato:</label>
-                    <select class="form-control" name="contato_id" id="contato_id">
+                    <label id="contato_id" for="contatos_id">Contato:</label>
+                    <select class="form-control" id="contatos_id" name="contato_id">
                     </select>
                 </div>
                 <div class="subcolumn" style="width:20%;display:flex"></div>
@@ -45,21 +48,23 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#cliente_id').on('change', function() {
+            $('#clientes_id').on('change', function() {
                 var clienteId = this.value;
-                $("contato_id").html('');
+                $("contatos_id").html('');
                 $.ajax({
-                    url: "{{ url('api/fetch-contatos')}}",
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{ url('fetchContatos')}}",
                     type: "POST",
                     data: {
-                        cliente_id: clienteId,
-                        _token: '{{csrf_token()}}'
+                        cliente_id: clienteId
                     },
                     dataType: 'json',
                     success: function (result) {
-                        $('#contato_id').html('<option value="">-- Select Contato --</option>');
+                        $('#contatos_id').html('<option value="">-- Contato --</option>');
                         $.each(result.contatos, function (key,value) {
-                            $("#contato_id").append('<option value="' + value.id + '">' + value.nome + '</option>');
+                            $("#contatos_id").append('<option value="' + value.id + '">' + value.nome + '</option>');
                         });
                     }
                 });

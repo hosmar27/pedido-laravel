@@ -27,8 +27,8 @@
                             </div>   
                             <div class="subcolumn">  
                             <label for="exampleFormControlSelect1">Cliente:</label>
-                                <select class="form-control" name="clientes_id">
-                                    <option value="{{ $contato->cliente->nome }}" disabled selected>Selecione</option>
+                                <select class="form-control" name="cliente_id">
+                                    <option value="" disabled selected>Selecione</option>
                                     @foreach ($clientes as $cliente)
                                     <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
                                     @endforeach
@@ -47,7 +47,7 @@
                             <div class="subcolumn" style="background-color:#f1f1f1; width:100%; height:8vh"></div>
                         </div> 
                     <div class="buttons">
-                        <button class="btn-submit" type="submit" action="{{ route('contato.store')}}">Editar</button>
+                        <button class="btn-submit" type="submit" action="{{ route('contato.update')}}">Editar</button>
                         <a href="{{ route('contato.index')}}">Voltar</a>
                     </div>
                 </div>

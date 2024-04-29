@@ -8,7 +8,6 @@
 
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>  
-        <script src="http://lab.iamrohit.in/js/location.js"></script>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

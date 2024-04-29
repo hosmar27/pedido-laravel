@@ -33,10 +33,10 @@
                         <td>{{$pedido->contato->nome}}</td>
                         <td class="action">
                         <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
-                        <form action="{{route('pedido.destroy', $pedido->id)}}" method="post">
+                        <form method="post" action="{{ route('pedido.destroy', $pedido->id) }}">
                             @csrf
                             @method('delete')
-                            <input type="submit" value="Excluir" class="btn-submit" style="width: 100px;">
+                            <input type="submit" value="Excluir" class="btn-submit" style="width: 150px;">
                         </form>
                     </td>
                     </tr>

@@ -54,7 +54,6 @@ class ContatoController extends Controller
         $request->validate([
             'nome' => 'required',
             'email' => 'required',
-            'cliente_id' => 'required'
         ]);
 
         $contato = new Contato();
@@ -77,7 +76,7 @@ class ContatoController extends Controller
         $contato = Contato::findOrFail($id);
         $query = DB::select("SELECT * FROM `clientes` WHERE deleted_at IS null");
         $cliente = collect($query)->toArray();
-        return view('contatos.edit',['contato' => $contato],['clientes' => $cliente]);
+        return view('contatos.edit',['contato' => $contato],['cliente' => $cliente]);
     }
 
     /**
@@ -90,7 +89,7 @@ class ContatoController extends Controller
         $contato->email = $request->input('email');
         $contato->telefone = $request->input('telefone');
         $contato->cpf = $request->input('cpf');
-        $contato->clientes_id = $request->input('clientes_id');
+        $contato->cliente_id = $request->input('cliente_id');
 
         $contato->save();
         return redirect()->route('contato.index')->with('update','Contato atualizado');
@@ -103,22 +102,6 @@ class ContatoController extends Controller
     {
         $contato = Contato::find($contato->id)->delete();
         return redirect('/contato')->with('delete','Contato excluido');
-    }
-
-    public function get_by_cliente(Request $request)
-    {
-
-        if (!$request->cliente_id) {
-            $html = '<option value="">'.trans('global.pleaseSelect').'</option>';
-        } else {
-            $html = '';
-            $contatos     = Contato::where('cliente_id', $request->cliente_id)->get();
-            foreach ($contatos as $contato) {
-                $html .= '<option value="'.$contato->id.'">'.$contato->name.'</option>';
-            }
-        }
-
-        return response()->json(['html' => $html]);
     }
 
 }

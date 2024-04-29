@@ -49,9 +49,8 @@ class PedidoController extends Controller
 
     public function fetchContatos(Request $request)
     {
-        dd('asd');
         $contatos['contatos'] = Contato::where("cliente_id", $request->cliente_id)
-                                ->get(["name", "id"]);
+                                ->get(["nome", "id"]);
   
                                 
         return response()->json($contatos);
@@ -71,22 +70,27 @@ class PedidoController extends Controller
         return redirect('/pedido')->with('sucess', 'Pedido criado');
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit($id)
     {
         $pedido = Pedido::findOrFail($id);
-        $query = DB::select("SELECT * FROM `pedidos` WHERE deleted_at IS null");
-        $pedido = collect($query)->toArray();
-        return view('pedidos.edit', ['pedido' => $pedido]);
+        $query = DB::select("SELECT * FROM `clientes` WHERE deleted_at IS null");
+        $contato = collect($query)->toArray();
+        $query = DB::select("SELECT * FROM `clientes` WHERE deleted_at IS null");
+        $clientes = collect($query)->toArray();
+        return view('pedidos.edit',['pedido' => $pedido ,'contato' => $contato, 'clientes' => $clientes]);
     }
 
     public function update(Request $request, Pedido $pedido)
     {
         $pedido = Pedido::find($request->id);
-        $pedido->cliente = $request->select('cliente_id');
-        $pedido->cliente = $request->select('contato_id');
+        $pedido->cliente_id = $request->option('cliente_id');
+        $pedido->contato_id = $request->select('contato_id');
 
         $pedido->save();
-        return redirect()->route('pedido.index')->with('update','Contato atualizado');
+        return redirect()->route('pedido.index')->with('update','Pedido atualizado');
     }
 
     /**
@@ -94,7 +98,7 @@ class PedidoController extends Controller
      */
     public function destroy(Pedido $pedido)
     {
-        Pedido::find($pedido->id)->delete();
-        return redirect()->route('pedido.index')->with('delete','Contato excluido');
+        $pedido = Pedido::find($pedido->id)->delete();
+        return redirect('/pedido')->with('delete','Pedido excluido');
     }
 }
