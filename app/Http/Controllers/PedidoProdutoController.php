@@ -34,7 +34,8 @@ class PedidoProdutoController extends Controller
      */
     public function create()
     {
-        //
+        $query = DB::select("SELECT * FROM `pedidos_produtos` WHERE deleted_at IS NULL");
+        // Usar id produto e id pedido tmb
     }
 
     /**

@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pedidos', function (Blueprint $table) {
-            $table
+            $table->double('total', 8,2)->change();
+            $table->double('frete', 8,2)->change();
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('pedidos', function (Blueprint $table) {
-            //
+            $table->dropColumn('total', 8,2);
+            $table->dropColumn('total', 8,2);
         });
     }
 };
