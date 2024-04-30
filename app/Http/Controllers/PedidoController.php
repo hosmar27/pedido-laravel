@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class PedidoController extends Controller
 {
+    
     /**
      * Display a listing of the resource.
      */
@@ -86,8 +87,9 @@ class PedidoController extends Controller
     public function update(Request $request, Pedido $pedido)
     {
         $pedido = Pedido::find($request->id);
-        $pedido->cliente_id = $request->option('cliente_id');
-        $pedido->contato_id = $request->select('contato_id');
+        
+        $pedido->cliente_id = $request->input('cliente_id');
+        $pedido->contato_id = $request->input('contato_id');
 
         $pedido->save();
         return redirect()->route('pedido.index')->with('update','Pedido atualizado');

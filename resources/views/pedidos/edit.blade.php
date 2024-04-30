@@ -6,7 +6,7 @@
     </head>
     <div class="container">
         <form action="/pedido/{{$pedido->id}}/update" method="post">
-        @csrf    
+        @csrf
         @method('PUT')
             <h1>Editar pedidos</h1>
             @if($errors->any)

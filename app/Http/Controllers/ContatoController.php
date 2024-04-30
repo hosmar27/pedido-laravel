@@ -85,6 +85,7 @@ class ContatoController extends Controller
     public function update(Request $request, contato $contato)
     {
         $contato = Contato::find($request->id);
+        
         $contato->nome = $request->input('nome');
         $contato->email = $request->input('email');
         $contato->telefone = $request->input('telefone');
