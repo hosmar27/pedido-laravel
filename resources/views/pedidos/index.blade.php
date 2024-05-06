@@ -23,22 +23,29 @@
                     <th>ID</th>
                     <th>Cliente</th>
                     <th>Contato</th>
+                    <th>Produto</th>
                     <th>Excluir/Editar</th>
                 </tr>
                 @foreach ($pedidos as $pedido)
-                    <tr>
-                        <td>{{$pedido->id}}</td>
-                        <td>{{$pedido->cliente->nome}}</td>
-                        <td>{{$pedido->contato->nome}}</td>
-                        <td class="action">
+                <tr>
+                    <td>{{$pedido->id}}</td>
+                    <td>{{$pedido->cliente->nome}}</td>
+                    <td>{{$pedido->contato->nome}}</td>
+                    <td class="icon">
+                        <form method="get" action="{{ route('pedido.addProduto', $pedido->id) }}">
+                            <i class="bi-plus-circle" type=""><input type="submit" value="" class="btn-submit"></i>
+                            
+                        </form>
+                    </td>
+                    <td class="action">
                         <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
                         <form method="post" action="{{ route('pedido.destroy', $pedido->id) }}">
-                            @csrf
                             @method('delete')
+                            @csrf
                             <input type="submit" value="Excluir" class="btn-submit" style="width: 150px;">
                         </form>
                     </td>
-                    </tr>
+                </tr>
                 @endforeach
             </table>
             <div class="buttons">

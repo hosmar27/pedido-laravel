@@ -88,6 +88,8 @@ th{
 
 td{
     color: #8200E6;
+    width: 100%;
+    height: 100%;
 }
 
 input{
@@ -113,4 +115,16 @@ svg{
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+}
+
+i{
+    width: 16px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.icon{
+    align-content: center;
+    justify-content: center;
 }

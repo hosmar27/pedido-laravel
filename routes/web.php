@@ -5,7 +5,6 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\PedidoController;
-use App\Http\Controllers\PedidoProdutoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +37,8 @@ Route::resource('pedido', PedidoController::class);
 Route::get('/pedido/{id}/edit',[PedidoController::class,'edit']);
 Route::put('/pedido/{id}/update',[PedidoController::class,'update']);
 Route::get('/pedido/{id}/destroy',[PedidoController::class,'destroy']);
-Route::post('/fetchContatos', [PedidoController::class,'fetchContatos']);
-
-Route::resource('pedidos_produtos', PedidoProdutoController::class);
+Route::post('/pedido/fetchContatos', [PedidoController::class,'fetchContatos']);
+Route::post('/pedido/fetchProdutos', [PedidoController::class,'fetchProdutos']);
+Route::get('/pedido/{id}/addProduto',[PedidoController::class,'addProduto'])->name('pedido.addProduto');
+Route::post('/pedido/storeProduto',[PedidoController::class,'storeProduto'])->name('pedido.storeProduto');
+Route::get('/pedido/indexProduto',[PedidoController::class,'indexProduto'])->name('pedido.indexProduto');

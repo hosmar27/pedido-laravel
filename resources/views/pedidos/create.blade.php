@@ -39,12 +39,10 @@
             </div>
             <div class="buttons">
                 <button class="btn-submit" type="submit" action="{{ route('pedido.store')}}">Cadastrar</button>
-                <a href="{{ route('pedido.index')}}">Voltar</a>
+                <a href="{{ route('pedido.indexProduto')}}">Voltar</a>
             </div>
         </form>
     </div>
-
-
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -55,7 +53,7 @@
                     headers:{
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ url('fetchContatos')}}",
+                    url: "{{ url('/pedido/fetchContatos')}}",
                     type: "POST",
                     data: {
                         cliente_id: clienteId
