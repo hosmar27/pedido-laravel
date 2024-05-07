@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\{Pedido, Produto, Contato, PedidoProduto};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class PedidoController extends Controller
 {
@@ -50,6 +51,7 @@ class PedidoController extends Controller
 
     public function fetchContatos(Request $request)
     {
+        //echo $request;
         $contatos['contatos'] = Contato::where("cliente_id", $request->cliente_id)
                                 ->get(["nome", "id"]);
 
@@ -107,7 +109,7 @@ class PedidoController extends Controller
     public function indexPedidoProduto()
     {
         $query = PedidoProduto::query()
-            ->select('pedidos_produtos.id AS pedidos_produtos_id','pedidos_produtos.preco','pedidos_produtos.total','pedidos_produtos.desconto','pedidos_produtos.frete')
+            ->select('pedidos_produtos.id AS pedidos_produtos_id','pedidos_produtos.preco','pedidos_produtos.desconto')
             ->join('pedidos','pedidos.id','=','pedidos_produtos.pedido_id')
             ->wherenull('pedidos.deleted_at')
             ->wherenull('pedidos_produtos.deleted_at');
@@ -124,7 +126,10 @@ class PedidoController extends Controller
     
     public function addProduto()
     {
-        $query = DB::select("SELECT id,nome,valor FROM `produtos` WHERE deleted_at IS NULL");
+        $query = DB::select("SELECT produtos.id, produtos.nome, produtos.valor, produtos.estoque, produtos.descricao, pedidos_produtos.produto_id 
+        FROM `produtos` 
+        LEFT JOIN `pedidos_produtos` 
+        ON produtos.id = pedidos_produtos.produto_id");
 
         $produtos = collect($query)->toArray();
         return view('pedidos_produtos.create', ['produtos'=>$produtos]);
@@ -141,14 +146,32 @@ class PedidoController extends Controller
         return redirect('/pedido')->with('sucess', 'Pedido criado');
     }
 
-    public function fetchProdutos(Request $request)
+    public function fetchProdutos()
     {
-        $query = DB::select("SELECT * FROM `produtos` WHERE deleted_at  IS NULL");
+        $query = DB::select("SELECT produtos.id, produtos.nome, produtos.valor, produtos.estoque, produtos.descricao, pedidos_produtos.produto_id, produtos.deleted_at, pedidos_produtos.deleted_at 
+        FROM `pedidos_produtos` 
+        RIGHT JOIN `produtos` 
+        ON produtos.id = pedidos_produtos.produto_id
+        AND produtos.deleted_at IS NULL
+        AND pedidos_produtos.deleted_at IS NULL;");
+
         $produtos = collect($query)->toArray();
         
         return response()->json($produtos);
     }
+
+    public function fetchProduto(Request $request)
+    {
+        //dd($request);
+        $produto['produto'] = Produto::where("id", $request->id)
+                                ->get(["nome","valor","estoque","descricao","id"]);
+
+        //$produto = collect($query)->toArray();
+        //dd($produto);
+        return response()->json($produto);
+    }
 }
+
 /*
 $query = DB::select("SELECT pedidos_produtos.id, pedidos_produtos.quantidade, pedidos_produtos.valor, pedidos_produtos.observacao, pedidos_produtos.pedido_id, pedidos_produtos.produto_id, produtos.estoque, pedidos.id, pedidos.total, produtos.id, produtos.nome,pedidos_produtos.desconto
 FROM `pedidos_produtos`,`pedidos`,`produtos`

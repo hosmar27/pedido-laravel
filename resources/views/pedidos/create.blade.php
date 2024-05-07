@@ -62,6 +62,7 @@
                     success: function (result) {
                         $('#contatos_id').html('<option value="">-- Contato --</option>');
                         $.each(result.contatos, function (key,value) {
+                            console.log(result);
                             $("#contatos_id").append('<option value="' + value.id + '">' + value.nome + '</option>');
                         });
                     }
