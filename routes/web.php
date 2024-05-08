@@ -37,9 +37,11 @@ Route::resource('pedido', PedidoController::class);
 Route::get('/pedido/{id}/edit',[PedidoController::class,'edit']);
 Route::put('/pedido/{id}/update',[PedidoController::class,'update']);
 Route::get('/pedido/{id}/destroy',[PedidoController::class,'destroy']);
-Route::post('/pedido/fetchContatos', [PedidoController::class,'fetchContatos']);
-Route::get('/pedido/{id}/addProduto',[PedidoController::class,'addProduto'])->name('pedido.addProduto');
-Route::post('/pedido/storeProduto',[PedidoController::class,'storeProduto'])->name('pedido.storeProduto');
-Route::get('/pedido/indexProduto',[PedidoController::class,'indexProduto'])->name('pedido.indexProduto');
-Route::post('/pedido/fetchProduto', [PedidoController::class,'fetchProduto']);
-Route::post('/pedido/fetchProdutos', [PedidoController::class,'fetchProdutos']);
+Route::post('/pedido/fetchContatos',[PedidoController::class,'fetchContatos']);
+
+Route::get('/pedido_produto/index',[PedidoController::class,'indexPedidoProduto']);
+Route::get('/pedido_produto/create',[PedidoController::class,'createPedidoProduto']);
+Route::post('/pedido_produto/store', [PedidoController::class, 'storePedidoProduto'])->name('pedidoProduto.store');
+Route::get('/pedido_produto/edit',[PedidoController::class,'editPedidoProduto']);
+Route::post('/pedido_produto/update', [PedidoController::class, 'updatePedidoProduto'])->name('pedidoProduto.update');
+Route::post('/pedido/fetchProduto',[PedidoController::class,'fetchProduto']);

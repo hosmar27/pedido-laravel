@@ -109,7 +109,7 @@ class PedidoController extends Controller
     public function indexPedidoProduto()
     {
         $query = PedidoProduto::query()
-            ->select('pedidos_produtos.id AS pedidos_produtos_id','pedidos_produtos.preco','pedidos_produtos.desconto')
+            ->select('pedidos_produtos.id','pedidos_produtos.preco','pedidos_produtos.desconto')
             ->join('pedidos','pedidos.id','=','pedidos_produtos.pedido_id')
             ->wherenull('pedidos.deleted_at')
             ->wherenull('pedidos_produtos.deleted_at');
@@ -124,7 +124,7 @@ class PedidoController extends Controller
         return view('pedidos_produtos.index', ['pedidos_produtos'=>$pedidos_produtos, 'pedidos'=>$pedidos])->with('i',(request()->input('page',1) -1) *4);
     }
     
-    public function addProduto()
+    public function createPedidoProduto()
     {
         $query = DB::select("SELECT produtos.id, produtos.nome, produtos.valor, produtos.estoque, produtos.descricao, pedidos_produtos.produto_id 
         FROM `produtos` 
@@ -135,7 +135,7 @@ class PedidoController extends Controller
         return view('pedidos_produtos.create', ['produtos'=>$produtos]);
     }
 
-    public function storeProduto(Request $request)
+    public function storePedidoProduto(Request $request)
     {
         $pedidosprodutos = new PedidoProduto();
 
@@ -146,7 +146,31 @@ class PedidoController extends Controller
         return redirect('/pedido')->with('sucess', 'Pedido criado');
     }
 
-    public function fetchProdutos()
+    public function editPedidoProduto()
+    {
+
+    }
+
+    public function updatePedidoProduto()
+    {
+        
+    }
+
+    public function fetchProduto(Request $request)
+    {
+        //dd($request);
+        $query = Produto::where("id", $request->id)
+                                ->get(["nome","valor","estoque","descricao","id"])
+                                ->whereNull(["deleted_at"]);
+                                
+
+        $produto = collect($query)->toArray();
+
+        return response()->json($produto);
+    }
+}
+
+/*public function fetchProdutos()
     {
         $query = DB::select("SELECT produtos.id, produtos.nome, produtos.valor, produtos.estoque, produtos.descricao, pedidos_produtos.produto_id, produtos.deleted_at, pedidos_produtos.deleted_at 
         FROM `pedidos_produtos` 
@@ -158,26 +182,4 @@ class PedidoController extends Controller
         $produtos = collect($query)->toArray();
         
         return response()->json($produtos);
-    }
-
-    public function fetchProduto(Request $request)
-    {
-        //dd($request);
-        $produto['produto'] = Produto::where("id", $request->id)
-                                ->get(["nome","valor","estoque","descricao","id"]);
-
-        //$produto = collect($query)->toArray();
-        //dd($produto);
-        return response()->json($produto);
-    }
-}
-
-/*
-$query = DB::select("SELECT pedidos_produtos.id, pedidos_produtos.quantidade, pedidos_produtos.valor, pedidos_produtos.observacao, pedidos_produtos.pedido_id, pedidos_produtos.produto_id, produtos.estoque, pedidos.id, pedidos.total, produtos.id, produtos.nome,pedidos_produtos.desconto
-FROM `pedidos_produtos`,`pedidos`,`produtos`
-WHERE pedidos_produtos.pedido_id = pedidos.id
-AND pedidos_produtos.produto_id = produtos.id
-AND pedidos_produtos.deleted_at IS NULL
-AND pedidos.deleted_at IS NULL
-AND produtos.deleted_at IS NULL");
-*/
+    }*/

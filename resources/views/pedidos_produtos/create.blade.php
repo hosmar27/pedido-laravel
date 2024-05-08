@@ -46,7 +46,7 @@
                         <label for="desconto">Desconto:</label>
                         <input type="text" placeholder="Ex: 4360,00" class="form-control" name="desconto" id="desconto" >
                     </div>
-                    <div class="subcolumn" style="height:70px;width:20%;display:flex"></div>
+                    <div class="subcolumn" style="height:70px;width:20%;produto:flex"></div>
                 </div>
                 <div class="buttons">
                     <button class="btn-submit" type="submit" action="{{ route('pedido.storeProduto')}}">Cadastrar</button>
@@ -56,13 +56,11 @@
     </div>
 
 </section>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>  
 <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function() {       
             $('#produto_id').on('change', function() {
                 var idProduto = this.value;
-                $("valor").html('');
-                $("descricao").html('');
-                $("estoque").html('');
                 $.ajax({
                     headers:{
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -71,17 +69,30 @@
                     type: "POST",
                     data: {
                         id: idProduto,
-                        
                     },
                     dataType: 'JSON',
-                    success: function (display) {
+                    success: function (produto) {
 
+                        var valor = produto[0]['valor'];
+                        valor = valor.toFixed(2);
+                        valor = valor.replace('.', ',');
+                        $('#valor').val(valor);
 
-                        valor.setAttribute('value', display.valor);
-                        //document.getElementById("valor").value = valor;
-                        //$('#descricao').text(display.descricao);
-                        //$('#estoque').text(display.estoque);
-                        console.log(display);
+                        var descricao = produto[0]['descricao'];
+                        $('#descricao').val(descricao);
+
+                        var estoque = produto[0]['estoque'];
+                        $('#estoque').val(estoque);
+
+                        console.log(produto);
+
+                        console.log('valor:', produto.valor);
+                        console.log('descricao:', produto.descricao);
+                        console.log('estoque', produto.estoque);
+                    
+                        //valor.setAttribute('value', produto.valor);
+                        //descricao.setAttribute('value', produto.descricao);
+                        //estoque.setAttribute('value', produto.estoque);
                     }
                 });
             });
