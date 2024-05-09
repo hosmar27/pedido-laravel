@@ -6,6 +6,8 @@ use App\Models\{Pedido, Produto, Contato, PedidoProduto};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Number;
+use Ramsey\Uuid\Type\Decimal;
 
 class PedidoController extends Controller
 {
@@ -106,27 +108,40 @@ class PedidoController extends Controller
         return redirect('/pedido')->with('delete','Pedido excluido');
     }
 
-    public function indexPedidoProduto()
+    public function indexPedidoProduto(Request $request)
     {
-        $query = PedidoProduto::query()
-            ->select('pedidos_produtos.id','pedidos_produtos.preco','pedidos_produtos.desconto')
-            ->join('pedidos','pedidos.id','=','pedidos_produtos.pedido_id')
-            ->wherenull('pedidos.deleted_at')
-            ->wherenull('pedidos_produtos.deleted_at');
+        $query = DB::select("SELECT pedidos_produtos.id,pedidos_produtos.valor,pedidos_produtos.quantidade,pedidos_produtos.desconto,pedidos_produtos.produto_id,pedidos_produtos.pedido_id,pedidos_produtos.observacao,produtos.id,pedidos.id 
+                            FROM `pedidos_produtos`
+                            JOIN `produtos` ON pedidos_produtos.produto_id = produtos.id
+                            JOIN `pedidos` ON pedidos_produtos.pedido_id = pedidos.id
+                            WHERE produtos.deleted_at IS NULL
+                            AND pedidos_produtos.deleted_at IS NULL
+                            AND pedidos.deleted_at IS NULL");
         $pedidos_produtos = collect($query)->toArray();
-        $query = Pedido::query()
-            ->select('pedidos.cliente_id','pedidos.contato_id')
-            ->join('pedidos_produtos','pedidos_produtos.pedido_id','=','pedidos.id')
-            ->wherenull('pedidos.deleted_at')
-            ->wherenull('pedidos_produtos.deleted_at');
+        $query = DB::select("SELECT id, deleted_at
+                            FROM `pedidos`
+                            WHERE deleted_at IS NULL");
         $pedidos = collect($query)->toArray();
 
-        return view('pedidos_produtos.index', ['pedidos_produtos'=>$pedidos_produtos, 'pedidos'=>$pedidos])->with('i',(request()->input('page',1) -1) *4);
+        $keyword = $request->get('search');
+        $perPage = 3;
+
+        if (!empty($keyword)) {
+            $pedidos_produtos = PedidoProduto::where('id', 'LIKE', "%$keyword%")
+                            ->orWhere('produto_id', 'LIKE', "$keyword")
+                            ->orWhere('pedido_id', 'LIKE', "$keyword")
+                            ->latest()->paginate($perPage);
+        } else {
+            $pedidos_produtos = PedidoProduto::latest()->paginate($perPage);
+        }
+
+
+        return view('pedidos_produtos.index',['pedidos_produtos'=>$pedidos_produtos],['pedidos'=>$pedidos])->with('i',(request()->input('page',1) -1) *4);
     }
     
     public function createPedidoProduto()
     {
-        $query = DB::select("SELECT produtos.id, produtos.nome, produtos.valor, produtos.estoque, produtos.descricao, pedidos_produtos.produto_id 
+        $query = DB::select("SELECT produtos.id, produtos.nome, produtos.valor, produtos.estoque AS quantidade, produtos.descricao, pedidos_produtos.produto_id 
         FROM `produtos` 
         LEFT JOIN `pedidos_produtos` 
         ON produtos.id = pedidos_produtos.produto_id");
@@ -139,8 +154,23 @@ class PedidoController extends Controller
     {
         $pedidosprodutos = new PedidoProduto();
 
-        $pedidosprodutos->cliente_id = $request->cliente_id;
-        $pedidosprodutos->contato_id = $request->contato_id;
+        $pedidosprodutos->quantidade = $request->quantidade;
+
+        //Transforma os valores referentes a dinheiro no formato correto
+        $pedidosprodutos->valor = $request->valor;
+        $valor = $pedidosprodutos->valor;
+        $pedidosprodutos->valor = str_replace('.','',$valor);
+        $pedidosprodutos->valor = str_replace(',','.',$valor);
+
+        //Transforma os valores referentes a dinheiro no formato correto
+        $pedidosprodutos->desconto = $request->desconto;
+        $desconto = $pedidosprodutos->desconto;
+        $pedidosprodutos->desconto = str_replace('.','',$desconto);
+        $pedidosprodutos->desconto = str_replace(',','.',$desconto);
+
+        $pedidosprodutos->produto_id = $request->produto_id;
+        $pedidosprodutos->pedido_id = $request->pedido_id;
+        $pedidosprodutos->observacao = $request->observacao;
 
         $pedidosprodutos->save();
         return redirect('/pedido')->with('sucess', 'Pedido criado');
@@ -168,6 +198,8 @@ class PedidoController extends Controller
 
         return response()->json($produto);
     }
+
+
 }
 
 /*public function fetchProdutos()
@@ -182,4 +214,9 @@ class PedidoController extends Controller
         $produtos = collect($query)->toArray();
         
         return response()->json($produtos);
+    }*/
+
+    /*public function moneyFormat($value)
+    {
+        return 'R$' . number_format($value, 2)
     }*/

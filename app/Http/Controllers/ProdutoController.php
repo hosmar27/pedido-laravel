@@ -54,9 +54,14 @@ class ProdutoController extends Controller
 
         $produto->nome = $request->nome;
         $produto->estoque = $request->estoque;
-        $produto->valor = $request->valor;
         $produto->descricao = $request->descricao;
 
+
+        $produto->valor = $request->valor;
+        $valor = $produto->valor;
+        $produto->valor = str_replace(',','.',$valor);
+        
+        
         $produto->save();
         return redirect('/produto')->with('sucess','Produto criado');
     }

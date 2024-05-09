@@ -32,7 +32,7 @@
                     <td>{{$pedido->cliente->nome}}</td>
                     <td>{{$pedido->contato->nome}}</td>
                     <td class="icon">
-                        <form method="get" action="{{ route('pedido.addProduto', $pedido->id) }}">
+                        <form method="get" action="{{ route('pedidoProduto.create', $pedido->id) }}">
                             <i class="bi-plus-circle" type=""><input type="submit" value="" class="btn-submit"></i>
                             
                         </form>

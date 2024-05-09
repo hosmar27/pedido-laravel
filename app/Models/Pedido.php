@@ -10,6 +10,8 @@ class pedido extends Model
 {
     use SoftDeletes;
 
+    protected $table = 'pedidos';
+
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);

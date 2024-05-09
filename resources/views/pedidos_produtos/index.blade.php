@@ -5,8 +5,8 @@
 <section>
     <div class="container">
         <div class="column">
-            <h1>Lista de Contatos</h1>
-            <form method="GET" action="{{ route('contato.index') }}" accept-charset="UTF-8" role="search">
+            <h1>Pedidos & Produtos</h1>
+            <form method="GET" action="{{ route('pedidoProduto.index') }}" accept-charset="UTF-8" role="search">
                 @csrf
                 <div class="table-search" style="width: 350px;display:flex;flex-direction:row">
                     <div>
@@ -22,22 +22,24 @@
             <table class="table table-hover">
                 <tr>
                     <th>Id</th>
-                    <th>Preco</th>
+                    <th>Valor</th>
                     <th>Desconto</th>
                     <th>Produto</th>
+                    <th>Quantidade</th>
                     <th>N. Pedido</th>
                     <th>Excluir/Editar</th>
                 </tr>
                 @foreach ($pedidos_produtos as $pedido_produto)
                 <tr>
                     <td>{{$pedido_produto->id}}</td>
-                    <td>{{$pedido_produto->preco}}</td>
-                    <td>{{$pedido_produto->desconto}}</td>
+                    <td>{{ number_format($pedido_produto->valor, 2)}}</td>
+                    <td>{{$pedido_produto->desconto}}</td>a
                     <td>{{$pedido_produto->produto->id}}</td>
+                    <td>{{$pedido_produto->quantidade}}</td>
                     <td>{{$pedido_produto->pedido->id}}</td>
                     <td class="action">
-                        <a href="{{ route('contato.edit', $contato->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
-                        <form method="post" action="{{ route('contato.destroy', $contato->id) }}">
+                        <a href="{{ route('pedidoProduto.edit', $pedido_produto->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
+                        <form method="post" action="{{ route('pedidoProduto.destroy', $contato->id) }}">
                             @csrf
                             @method('delete')
                             <input type="submit" value="Excluir" class="btn-submit" style="width: 150px;">
@@ -47,9 +49,9 @@
                 @endforeach
             </table>
             <div class="buttons">
-                <a href="{{ route('contato.create')}}" class="btn-submit" style="width: 100px;">Cadastrar</button></a>
+                <a href="{{ route('pedidoProduto.create', $pedidos['id']) }}" class="btn-submit" style="width: 100px;">Cadastrar</a>
                 <div class="table-paginate">
-                    {{$contatos->links('layouts.pagination')}}
+                    {{$pedidos_produtos->links('layouts.pagination')}}
                 </div>
             </div>
         </div>

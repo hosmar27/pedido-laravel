@@ -9,4 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class PedidoProduto extends Model
 {
     use HasFactory,SoftDeletes;
+
+    protected $table = 'pedidos_produtos';
+
+    protected $casts = [
+        'decimal:2' => 'double',
+    ];
 }

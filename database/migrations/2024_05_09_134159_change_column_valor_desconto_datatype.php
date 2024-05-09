@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('pedidos', function (Blueprint $table) {
-            $table->double('total');
-            $table->double('frete');
+        Schema::table('pedidos_produtos', function (Blueprint $table) {
+            $table->double('valor')->change();
+            $table->double('desconto')->change();
         });
     }
 
@@ -22,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pedidos', function (Blueprint $table) {
-            $table->dropColumn('total');
-            $table->dropColumn('frete');
+        Schema::table('pedidos_produtos', function (Blueprint $table) {
+            $table->dropColumn('valor');
+            $table->dropColumn('desconto');
         });
     }
 };

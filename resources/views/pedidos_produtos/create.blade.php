@@ -5,7 +5,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
     <div class="container">
-        <form action="{{ route('pedido.storeProduto')}}" method="post">
+        <form action="{{ route('pedidoProduto.store')}}" method="post">
             @csrf
             <h1>Inserir produtos</h1>
             @if($errors->any)
@@ -34,22 +34,25 @@
                     </div>
                     <div class="subcolumn">
                         <label for="descricao">Observacao:</label>
-                        <input type="text" placeholder="Ex: Aparencia otima" class="form-control" name="descricao" id="descricao">
+                        <input type="text" placeholder="Ex: Aparencia otima" class="form-control" name="observacao" id="descricao">
                     </div>
                 </div>
                 <div class="column">
                     <div class="subcolumn">
                         <label for="estoque">Estoque:</label>
-                        <input type="text" placeholder="Ex: 1000" class="form-control" name="estoque" id="estoque">
+                        <input type="text" placeholder="Ex: 1000" class="form-control" name="quantidade" id="estoque">
                     </div>
                     <div class="subcolumn">
                         <label for="desconto">Desconto:</label>
                         <input type="text" placeholder="Ex: 4360,00" class="form-control" name="desconto" id="desconto" >
                     </div>
-                    <div class="subcolumn" style="height:70px;width:20%;produto:flex"></div>
+                    <div class="subcolumn">
+                        <label for="pedido_id">Pedido:</label>
+                        <input type="text" placeholder="Ex: 19" class="form-control" name="pedido_id" id="pedido_id" >
+                    </div>
                 </div>
                 <div class="buttons">
-                    <button class="btn-submit" type="submit" action="{{ route('pedido.storeProduto')}}">Cadastrar</button>
+                    <button class="btn-submit" type="submit" action="{{ route('pedidoProduto.store')}}">Cadastrar</button>
                     <a href="{{ route('pedido.index')}}">Voltar</a>
                 </div>
         </form>
@@ -58,44 +61,50 @@
 </section>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>  
 <script type="text/javascript">
-        $(document).ready(function() {       
-            $('#produto_id').on('change', function() {
-                var idProduto = this.value;
-                $.ajax({
-                    headers:{
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{ url('/pedido/fetchProduto')}}",
-                    type: "POST",
-                    data: {
-                        id: idProduto,
-                    },
-                    dataType: 'JSON',
-                    success: function (produto) {
 
-                        var valor = produto[0]['valor'];
-                        valor = valor.toFixed(2);
-                        valor = valor.replace('.', ',');
-                        $('#valor').val(valor);
+    $(document).ready(function() {       
+        $('#produto_id').on('change', function() {
+            var idProduto = this.value;
+            $.ajax({
+                headers:{
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: "{{ url('/pedido/fetchProduto')}}",
+                type: "POST",
+                data: {
+                    id: idProduto,
+                },
+                dataType: 'JSON',
+                success: function (produto) {
 
-                        var descricao = produto[0]['descricao'];
-                        $('#descricao').val(descricao);
+                    var quantidade;
 
-                        var estoque = produto[0]['estoque'];
-                        $('#estoque').val(estoque);
+                    var valor = produto[0]['valor'];
+                    valor = valor.replace('.', ',');
+                    $('#valor').val(valor);
 
-                        console.log(produto);
+                    var descricao = produto[0]['descricao'];
+                    $('#descricao').val(descricao);
 
-                        console.log('valor:', produto.valor);
-                        console.log('descricao:', produto.descricao);
-                        console.log('estoque', produto.estoque);
-                    
-                        //valor.setAttribute('value', produto.valor);
-                        //descricao.setAttribute('value', produto.descricao);
-                        //estoque.setAttribute('value', produto.estoque);
-                    }
-                });
+                    var estoque = produto[0]['estoque'];
+                    $('#estoque').val(estoque);
+
+                    var estoque = quantidade;
+
+                    console.log(produto);
+
+                    console.log('valor:', produto[0].valor);
+                    console.log('descricao:', produto[0].descricao);
+                    console.log('estoque:', produto[0].estoque);
+                
+                    //valor.setAttribute('value', produto.valor);
+                    //descricao.setAttribute('value', produto.descricao);
+                    //estoque.setAttribute('value', produto.estoque);
+                }
             });
         });
-    </script>
+    });
+
+
+</script>
 @endsection
