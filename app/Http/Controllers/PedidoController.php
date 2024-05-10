@@ -111,8 +111,8 @@ class PedidoController extends Controller
     public function indexPedidoProduto(Request $request, $id)
     {
         $query = DB::select("SELECT pedidos.id, pedidos_produtos.pedido_id
-                                FROM `pedidos`
-                                JOIN `pedidos_produtos` ON pedidos.id = pedidos_produtos.pedido_id
+                                FROM `pedidos_produtos`
+                                JOIN `pedidos` ON pedidos.id = pedidos_produtos.pedido_id
                                 WHERE pedidos.deleted_at IS NULL
                                 AND pedidos_produtos.deleted_at");
         $pedidos = collect($query)->toArray();

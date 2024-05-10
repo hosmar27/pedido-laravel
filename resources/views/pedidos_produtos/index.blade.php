@@ -5,8 +5,9 @@
 <section>
     <div class="container">
         <div class="column">
+            @dd($pedidos);
             <h1>Pedidos & Produtos</h1>
-            <form method="GET" action="{{ route('pedidoProduto.index', $pedidos->id)}}" accept-charset="UTF-8" role="search">
+            <form method="GET" action="{{ route('pedidoProduto.index',[$pedidos_produtos->pedido_id])}}" accept-charset="UTF-8" role="search">
                 @csrf
                 <div class="table-search" style="width: 350px;display:flex;flex-direction:row">
                     <div>
