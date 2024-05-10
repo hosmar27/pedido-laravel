@@ -24,7 +24,8 @@
                     <th>Cliente</th>
                     <th>Contato</th>
                     <th>Produto</th>
-                    <th>Excluir/Editar</th>
+                    <th>Editar</th>
+                    <th>Excluir</th>
                 </tr>
                 @foreach ($pedidos as $pedido)
                 <tr>
@@ -32,17 +33,18 @@
                     <td>{{$pedido->cliente->nome}}</td>
                     <td>{{$pedido->contato->nome}}</td>
                     <td class="icon">
-                        <form method="get" action="{{ route('pedido_produto.create', $pedido->id) }}">
-                            <i class="bi-plus-circle" type=""><input type="submit" value="" class="btn-submit"></i>
-                            
+                        <form method="get" action="{{ route('pedidoProduto.index', $pedido->id) }}">
+                            <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi-plus-circle" type="submit"></i></button>
                         </form>
                     </td>
-                    <td class="action">
-                        <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
+                    <td> 
+                        <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>
+                    </td>
+                    <td>    
                         <form method="post" action="{{ route('pedido.destroy', $pedido->id) }}">
                             @method('delete')
                             @csrf
-                            <input type="submit" value="Excluir" class="btn-submit" style="width: 150px;">
+                            <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-trash3"></i></button>
                         </form>
                     </td>
                 </tr>

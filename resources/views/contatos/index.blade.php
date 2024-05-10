@@ -36,11 +36,11 @@
                     <td>{{$contato->telefone}}</td>
                     <td>{{$contato->cpf}}</td>
                     <td class="action">
-                        <a href="{{ route('contato.edit', $contato->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
+                        <a href="{{ route('contato.edit', $contato->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></a>
                         <form method="post" action="{{ route('contato.destroy', $contato->id) }}">
                             @csrf
                             @method('delete')
-                            <input type="submit" value="Excluir" class="btn-submit" style="width: 150px;">
+                            <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-trash3"></i></button>
                         </form>
                     </td>
                 </tr>

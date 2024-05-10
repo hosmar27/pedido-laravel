@@ -6,7 +6,7 @@
     <div class="container">
         <div class="column">
             <h1>Pedidos & Produtos</h1>
-            <form method="GET" action="{{ route('pedidoProduto.index') }}" accept-charset="UTF-8" role="search">
+            <form method="GET" action="{{ route('pedidoProduto.index', $pedidos->id)}}" accept-charset="UTF-8" role="search">
                 @csrf
                 <div class="table-search" style="width: 350px;display:flex;flex-direction:row">
                     <div>
@@ -38,19 +38,18 @@
                     <td>{{$pedido_produto->quantidade}}</td>
                     <td>{{$pedido_produto->pedido_id}}</td>
                     <td class="action">
-                        <a href="{{ route('pedidoProduto.edit', $pedido_produto->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
+                        <a href="{{ route('pedidoProduto.edit', $pedido_produto->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>
                         <form method="post" action="{{ route('pedidoProduto.destroy', $pedido_produto->id) }}">
                             @csrf
                             @method('delete')
-                            <input type="submit" value="Excluir" class="btn-submit" style="width: 150px;">
+                            <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-trash3"></i></button>
                         </form>
                     </td>
                 </tr>
                 @endforeach
             </table>
-            <div class="buttons">
+            <div class="buttons" style="display: flex;flex-direction:column">
                 <a href="{{ route('pedido.index') }}" class="btn-submit" style="width: 100px;">Pedidos</a>
-
                 <div class="table-paginate">
                     {{$pedidos_produtos->links('layouts.pagination')}}
                 </div>

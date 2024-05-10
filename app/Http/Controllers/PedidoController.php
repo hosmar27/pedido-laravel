@@ -108,21 +108,23 @@ class PedidoController extends Controller
         return redirect('/pedido')->with('delete','Pedido excluido');
     }
 
-    public function indexPedidoProduto(Request $request)
+    public function indexPedidoProduto(Request $request, $id)
     {
-        $query = DB::select("SELECT pedidos_produtos.id,pedidos_produtos.valor,pedidos_produtos.quantidade,pedidos_produtos.desconto,pedidos_produtos.produto_id,pedidos_produtos.pedido_id,pedidos_produtos.observacao,produtos.id,pedidos.id 
+        $query = DB::select("SELECT pedidos.id, pedidos_produtos.pedido_id
+                                FROM `pedidos`
+                                JOIN `pedidos_produtos` ON pedidos.id = pedidos_produtos.pedido_id
+                                WHERE pedidos.deleted_at IS NULL
+                                AND pedidos_produtos.deleted_at");
+        $pedidos = collect($query)->toArray();
+
+        $query = DB::select("SELECT pedidos_produtos.id,pedidos_produtos.quantidade,pedidos_produtos.valor,pedidos_produtos.desconto,pedidos_produtos.observacao,pedidos_produtos.pedido_id,pedidos_produtos.produto_id,pedidos_produtos.deleted_at,pedidos.id
                             FROM `pedidos_produtos`
-                            JOIN `produtos` ON pedidos_produtos.produto_id = produtos.id
-                            JOIN `pedidos` ON pedidos_produtos.pedido_id = pedidos.id
-                            WHERE produtos.deleted_at IS NULL
+                            JOIN `pedidos` ON pedidos.id = pedidos_produtos.pedido_id
+                            WHERE pedidos.deleted_at IS NULL
                             AND pedidos_produtos.deleted_at IS NULL
-                            AND pedidos.deleted_at IS NULL");
+                            AND pedidos.id = $id;");
         $pedidos_produtos = collect($query)->toArray();
 
-        $query = DB::select("SELECT id, deleted_at
-                            FROM `pedidos`
-                            WHERE deleted_at IS NULL");
-        $pedidos = collect($query)->toArray();
 
         $keyword = $request->get('search');
         $perPage = 3;
@@ -165,17 +167,12 @@ class PedidoController extends Controller
         $valor = $pedidosprodutos->valor;
         $pedidosprodutos->valor = str_replace('.','',$valor);
         $pedidosprodutos->valor = str_replace(',','.',$valor);
-        $pedidosprodutos->valor = str_replace('R$','',$valor);
-
-        dd($valor);
 
         //Transforma os valores referentes a dinheiro no formato correto
         $pedidosprodutos->desconto = $request->desconto;
         $desconto = $pedidosprodutos->desconto;
         $pedidosprodutos->desconto = str_replace('.','',$desconto);
         $pedidosprodutos->desconto = str_replace(',','.',$desconto);
-        $pedidosprodutos->desconto = str_replace('R$ ','',$desconto);
-        if($desconto = NULL) ($desconto = '0');
 
         $pedidosprodutos->produto_id = $request->produto_id;
         $pedidosprodutos->pedido_id = $request->pedido_id;

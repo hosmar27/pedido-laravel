@@ -30,7 +30,7 @@
                     </div>
                     <div class="subcolumn">
                         <label for="valor">Valor:</label>
-                        <input type="text" placeholder="Ex: 5,0" class="form-control" id="valor" name="valor">
+                        <input type="text" placeholder="Ex: 1200,0" class="form-control" id="valor" name="valor">
                     </div>
                     <div class="subcolumn">
                         <label for="descricao">Observacao:</label>
@@ -44,7 +44,7 @@
                     </div>
                     <div class="subcolumn">
                         <label for="desconto">Desconto:</label>
-                        <input type="text" placeholder="Ex: 4360,00" class="form-control" name="desconto" id="desconto" >
+                        <input type="text" placeholder="Ex: 400,00" class="form-control" name="desconto" id="desconto" >
                     </div>
                     <div class="subcolumn">
                         <label for="pedido_id">Pedido:</label>
@@ -83,7 +83,7 @@
 
                     var valor = produto[0]['valor'];
                     valor = valor.replace('.', ',');
-                    valor = 'R$ '+valor;
+                    //valor = 'R$ '+valor;
                     $('#valor').val(valor);
 
                     var descricao = produto[0]['descricao'];
@@ -93,7 +93,7 @@
                     $('#estoque').val(estoque);
 
                     desconto = '0,00';
-                    desconto = 'R$ '+desconto;
+                    //desconto = 'R$ '+desconto;
                     $('#desconto').val(desconto);
 
                     var estoque = quantidade;
