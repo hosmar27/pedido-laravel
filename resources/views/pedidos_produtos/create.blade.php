@@ -48,12 +48,12 @@
                     </div>
                     <div class="subcolumn">
                         <label for="pedido_id">Pedido:</label>
-                        <input type="text" placeholder="Ex: 19" class="form-control" name="pedido_id" id="pedido_id" >
+                        <input type="text" value="{{$pedidos->id}}" placeholder="Ex: 19" class="form-control" name="pedido_id" id="pedido_id">
                     </div>
                 </div>
                 <div class="buttons">
                     <button class="btn-submit" type="submit" action="{{ route('pedidoProduto.store')}}">Cadastrar</button>
-                    <a href="{{ route('pedido.index')}}">Voltar</a>
+                    <a href="{{ route('pedidoProduto.index')}}">Voltar</a>
                 </div>
         </form>
     </div>
@@ -79,8 +79,11 @@
 
                     var quantidade;
 
+                    var desconto;
+
                     var valor = produto[0]['valor'];
                     valor = valor.replace('.', ',');
+                    valor = 'R$ '+valor;
                     $('#valor').val(valor);
 
                     var descricao = produto[0]['descricao'];
@@ -88,6 +91,10 @@
 
                     var estoque = produto[0]['estoque'];
                     $('#estoque').val(estoque);
+
+                    desconto = '0,00';
+                    desconto = 'R$ '+desconto;
+                    $('#desconto').val(desconto);
 
                     var estoque = quantidade;
 

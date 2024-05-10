@@ -33,13 +33,13 @@
                 <tr>
                     <td>{{$pedido_produto->id}}</td>
                     <td>{{ number_format($pedido_produto->valor, 2)}}</td>
-                    <td>{{$pedido_produto->desconto}}</td>a
-                    <td>{{$pedido_produto->produto->id}}</td>
+                    <td>{{$pedido_produto->desconto}}</td>
+                    <td>{{$pedido_produto->produto_id}}</td>
                     <td>{{$pedido_produto->quantidade}}</td>
-                    <td>{{$pedido_produto->pedido->id}}</td>
+                    <td>{{$pedido_produto->pedido_id}}</td>
                     <td class="action">
                         <a href="{{ route('pedidoProduto.edit', $pedido_produto->id) }}" class="btn-submit" style="width: 100px;">Editar</a>
-                        <form method="post" action="{{ route('pedidoProduto.destroy', $contato->id) }}">
+                        <form method="post" action="{{ route('pedidoProduto.destroy', $pedido_produto->id) }}">
                             @csrf
                             @method('delete')
                             <input type="submit" value="Excluir" class="btn-submit" style="width: 150px;">
@@ -49,7 +49,8 @@
                 @endforeach
             </table>
             <div class="buttons">
-                <a href="{{ route('pedidoProduto.create', $pedidos['id']) }}" class="btn-submit" style="width: 100px;">Cadastrar</a>
+                <a href="{{ route('pedido.index') }}" class="btn-submit" style="width: 100px;">Pedidos</a>
+
                 <div class="table-paginate">
                     {{$pedidos_produtos->links('layouts.pagination')}}
                 </div>
