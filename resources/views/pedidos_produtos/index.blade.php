@@ -5,9 +5,9 @@
 <section>
     <div class="container">
         <div class="column">
-            @dd($pedidos);
             <h1>Pedidos & Produtos</h1>
-            <form method="GET" action="{{ route('pedidoProduto.index',[$pedidos_produtos->pedido_id])}}" accept-charset="UTF-8" role="search">
+            @dd($pedidos)
+            <form method="GET" action="{{ route('pedidoProduto.index',$pedidos) }}" accept-charset="UTF-8" role="search">
                 @csrf
                 <div class="table-search" style="width: 350px;display:flex;flex-direction:row">
                     <div>
@@ -27,13 +27,13 @@
                     <th>Desconto</th>
                     <th>Produto</th>
                     <th>Quantidade</th>
-                    <th>N. Pedido</th>
+                    <th>Pedido</th>
                     <th>Excluir/Editar</th>
                 </tr>
                 @foreach ($pedidos_produtos as $pedido_produto)
                 <tr>
                     <td>{{$pedido_produto->id}}</td>
-                    <td>{{ number_format($pedido_produto->valor, 2)}}</td>
+                    <td>{{$pedido_produto->valor}}</td>
                     <td>{{$pedido_produto->desconto}}</td>
                     <td>{{$pedido_produto->produto_id}}</td>
                     <td>{{$pedido_produto->quantidade}}</td>

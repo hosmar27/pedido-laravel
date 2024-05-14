@@ -110,36 +110,19 @@ class PedidoController extends Controller
 
     public function indexPedidoProduto(Request $request, $id)
     {
-        $query = DB::select("SELECT pedidos.id, pedidos_produtos.pedido_id
-                                FROM `pedidos_produtos`
-                                JOIN `pedidos` ON pedidos.id = pedidos_produtos.pedido_id
-                                WHERE pedidos.deleted_at IS NULL
-                                AND pedidos_produtos.deleted_at");
-        $pedidos = collect($query)->toArray();
 
-        $query = DB::select("SELECT pedidos_produtos.id,pedidos_produtos.quantidade,pedidos_produtos.valor,pedidos_produtos.desconto,pedidos_produtos.observacao,pedidos_produtos.pedido_id,pedidos_produtos.produto_id,pedidos_produtos.deleted_at,pedidos.id
-                            FROM `pedidos_produtos`
-                            JOIN `pedidos` ON pedidos.id = pedidos_produtos.pedido_id
-                            WHERE pedidos.deleted_at IS NULL
-                            AND pedidos_produtos.deleted_at IS NULL
-                            AND pedidos.id = $id;");
-        $pedidos_produtos = collect($query)->toArray();
-
+        $pedidos = Pedido::where('pedidos.id', $id)
+                            ->join('pedidos_produtos','pedidos.id','=','pedidos_produtos.pedido_id')
+                            ->select('pedidos_produtos.id','pedidos_produtos.quantidade','pedidos_produtos.valor','pedidos_produtos.desconto','pedidos_produtos.observacao','pedidos_produtos.pedido_id','pedidos_produtos.produto_id','pedidos_produtos.deleted_at')
+                            ->whereNull('pedidos.deleted_at')
+                            ->whereNull('pedidos_produtos.deleted_at')
+                            ->get();
 
         $keyword = $request->get('search');
-        $perPage = 3;
+        $perPage = 4;
+        
 
-        if (!empty($keyword)) {
-            $pedidos_produtos = PedidoProduto::where('id', 'LIKE', "%$keyword%")
-                            ->orWhere('produto_id', 'LIKE', "$keyword")
-                            ->orWhere('pedido_id', 'LIKE', "$keyword")
-                            ->latest()->paginate($perPage);
-        } else {
-            $pedidos_produtos = PedidoProduto::latest()->paginate($perPage);
-        }
-
-
-        return view('pedidos_produtos.index',['pedidos_produtos'=>$pedidos_produtos],['pedidos'=>$pedidos])->with('i',(request()->input('page',1) -1) *4);
+        return view('pedidos_produtos.index',compact('pedidos'))->with('i',(request()->input('page',1) -1) *4);
     }
     
     public function createPedidoProduto($id)
@@ -236,3 +219,17 @@ class PedidoController extends Controller
     {
         return 'R$' . number_format($value, 2)
     }*/
+
+    /*$query = DB::select("SELECT pedidos.id AS pedidoId, pedidos_produtos.pedido_id
+    FROM `pedidos_produtos`
+    JOIN `pedidos` ON pedidos.id = pedidos_produtos.pedido_id
+    WHERE pedidos.deleted_at IS NULL
+    AND pedidos_produtos.deleted_at");
+$pedidos = collect($query)->toArray();*/
+
+
+/*$query = DB::select("SELECT pedidos_produtos.id,pedidos_produtos.quantidade,pedidos_produtos.valor,pedidos_produtos.desconto,pedidos_produtos.observacao,pedidos_produtos.pedido_id,pedidos_produtos.produto_id,pedidos_produtos.deleted_at
+FROM `pedidos_produtos`
+WHERE pedidos_produtos.pedido_id = $pedidos
+AND pedidos_produtos.deleted_at IS NULL;");
+$pedidos_produtos = collect($query)->toArray();*/

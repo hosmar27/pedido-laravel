@@ -34,7 +34,7 @@
                     <td>{{$pedido->contato->nome}}</td>
                     <td class="icon">
                         <form method="get" action="{{ route('pedidoProduto.index', $pedido->id) }}">
-                            <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi-plus-circle" type="submit"></i></button>
+                            <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-list" type="submit"></i></button>
                         </form>
                     </td>
                     <td> 
