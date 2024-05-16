@@ -6,8 +6,9 @@ use App\Models\{Pedido, Produto, Contato, PedidoProduto};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Number;
-use Ramsey\Uuid\Type\Decimal;
+use Illuminate\Contracts\Pagination\Paginator;
+
+use function Laravel\Prompts\select;
 
 class PedidoController extends Controller
 {
@@ -108,21 +109,23 @@ class PedidoController extends Controller
         return redirect('/pedido')->with('delete','Pedido excluido');
     }
 
-    public function indexPedidoProduto(Request $request, $id)
+    public function indexPedidoProduto(Request $request, $pedidoId)
     {
 
-        $pedidos = Pedido::where('pedidos.id', $id)
-                            ->join('pedidos_produtos','pedidos.id','=','pedidos_produtos.pedido_id')
-                            ->select('pedidos_produtos.id','pedidos_produtos.quantidade','pedidos_produtos.valor','pedidos_produtos.desconto','pedidos_produtos.observacao','pedidos_produtos.pedido_id','pedidos_produtos.produto_id','pedidos_produtos.deleted_at')
-                            ->whereNull('pedidos.deleted_at')
-                            ->whereNull('pedidos_produtos.deleted_at')
-                            ->get();
+        $id = $pedidoId;
 
-        $keyword = $request->get('search');
         $perPage = 4;
-        
 
-        return view('pedidos_produtos.index',compact('pedidos'))->with('i',(request()->input('page',1) -1) *4);
+        $pedidos_produtos = PedidoProduto::where('pedidos_produtos.pedido_id', $pedidoId)
+            ->join('pedidos','pedidos.id', '=', 'pedidos_produtos.pedido_id')
+            ->join('produtos','produtos.id', '=', 'pedidos_produtos.produto_id')
+            ->select('pedidos.id AS pedidoId','produtos.id AS produtoId','produtos.nome','produtos.estoque','pedidos_produtos.id AS pedidosprodutosId','pedidos_produtos.quantidade','pedidos_produtos.valor','pedidos_produtos.desconto')
+            ->where('pedidos.deleted_at', '=', null)
+            ->where('pedidos_produtos.deleted_at', '=', null)
+            ->paginate($perPage);
+
+
+        return view('pedidos_produtos.index',compact('pedidos_produtos','pedidoId'))->with('i',(request()->input('page',1) -1) *5);
     }
     
     public function createPedidoProduto($id)
@@ -173,6 +176,13 @@ class PedidoController extends Controller
     public function updatePedidoProduto()
     {
         
+    }
+
+    public function destroyPedidoProduto(PedidoProduto $pedido_produto)
+    {
+        $pedido_produto = PedidoProduto::find($pedido_produto->pedidosprodutosId);
+        dd($pedido_produto);
+        return redirect('pedidoProduto.index', $pedido_produto->pedidoId)->with('delete','Pedido & Produto excluido');
     }
 
     public function fetchProduto(Request $request)
@@ -232,4 +242,18 @@ $pedidos = collect($query)->toArray();*/
 FROM `pedidos_produtos`
 WHERE pedidos_produtos.pedido_id = $pedidos
 AND pedidos_produtos.deleted_at IS NULL;");
-$pedidos_produtos = collect($query)->toArray();*/
+$pedidos_produtos = collect($query)->toArray();
+
+
+ ->select('pedidos_produtos.id','pedidos_produtos.quantidade','pedidos_produtos.valor','pedidos_produtos.desconto','pedidos_produtos.observacao','pedidos_produtos.pedido_id','pedidos_produtos.produto_id','pedidos_produtos.deleted_at')
+                            ->whereNull('pedidos_produtos.deleted_at')
+
+        $keyword = $request->get('search');
+        $perPage = 5;
+
+            $pedidos_produtos = PedidoProduto::where('pedidos_produtos.pedido_id', $id)
+            ->join('pedidos','pedidos.id', '=', 'pedidos_produtos.pedido_id')
+            ->where('pedidos.deleted_at', '=', null)
+            ->where('pedidos_produtos.deleted_at', '=', null)
+            ->get()
+            ->paginate($perPage);*/

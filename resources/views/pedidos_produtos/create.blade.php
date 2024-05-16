@@ -53,7 +53,7 @@
                 </div>
                 <div class="buttons">
                     <button class="btn-submit" type="submit" action="{{ route('pedidoProduto.store')}}">Cadastrar</button>
-                    <a href="{{ route('pedidoProduto.index')}}">Voltar</a>
+                    <a href="{{ route('pedidoProduto.index', $pedidos->id)}}">Voltar</a>
                 </div>
         </form>
     </div>

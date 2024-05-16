@@ -6,50 +6,60 @@
     <div class="container">
         <div class="column">
             <h1>Pedidos & Produtos</h1>
-            @dd($pedidos)
-            <form method="GET" action="{{ route('pedidoProduto.index',$pedidos) }}" accept-charset="UTF-8" role="search">
-                @csrf
-                <div class="table-search" style="width: 350px;display:flex;flex-direction:row">
-                    <div>
-                        <button class="btn-submit" style="width: 100px;height:35px">
-                            Procurar
-                        </button>
+            <div class="main">
+                <form method="GET" action="{{ route('pedidoProduto.index',['pedidos_produtos' => $pedidos_produtos, 'pedidoId' => $pedidoId])}}" accept-charset="UTF-8" role="search">
+                    @csrf
+                    <div class="table-search" style="width: 350px;display:flex;flex-direction:row">
+                        <div>
+                            <button class="btn-submit" style="width: 100px;height:35px">
+                                Procurar
+                            </button>
+                        </div>
+                        <div class="relative">
+                            <input class="search-input" type="text" name="search" placeholder=" Digite aqui..." value="{{ request('search') }}" style="border-radius: 20px;border-color:#8200E6;width: 175px;height:35px">
+                        </div>
                     </div>
-                    <div class="relative">
-                        <input class="search-input" type="text" name="search" placeholder=" Digite aqui..." value="{{ request('search') }}" style="border-radius: 20px;border-color:#8200E6;width: 175px;height:35px">
-                    </div>
-                </div>
-            </form>
-            <table class="table table-hover">
-                <tr>
-                    <th>Id</th>
-                    <th>Valor</th>
-                    <th>Desconto</th>
-                    <th>Produto</th>
-                    <th>Quantidade</th>
-                    <th>Pedido</th>
-                    <th>Excluir/Editar</th>
-                </tr>
-                @foreach ($pedidos_produtos as $pedido_produto)
-                <tr>
-                    <td>{{$pedido_produto->id}}</td>
-                    <td>{{$pedido_produto->valor}}</td>
-                    <td>{{$pedido_produto->desconto}}</td>
-                    <td>{{$pedido_produto->produto_id}}</td>
-                    <td>{{$pedido_produto->quantidade}}</td>
-                    <td>{{$pedido_produto->pedido_id}}</td>
-                    <td class="action">
-                        <a href="{{ route('pedidoProduto.edit', $pedido_produto->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>
-                        <form method="post" action="{{ route('pedidoProduto.destroy', $pedido_produto->id) }}">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-trash3"></i></button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </table>
-            <div class="buttons" style="display: flex;flex-direction:column">
+                </form>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Valor</th>
+                            <th>Desconto</th>
+                            <th>Pedido</th>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Editar</th>
+                            <th>Excluir</th>
+                        </tr>
+                    </thead>
+                    @foreach ($pedidos_produtos as $pedido_produto)
+                    <tbody>
+                        <tr>
+                            <td>{{$pedido_produto->pedidosprodutosId}}</td>
+                            <td>{{$pedido_produto->valor}}</td>
+                            <td>{{$pedido_produto->desconto}}</td>
+                            <td>{{$pedido_produto->pedidoId}}</td>                            
+                            <td>{{$pedido_produto->nome}}</td>
+                            <td>{{$pedido_produto->quantidade}}</td>
+                            <td>
+                                <a href="{{ route('pedidoProduto.edit', $pedido_produto->pedidosprodutosId) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>
+                            </td>
+                            <td> 
+                                <form action="{{ route('pedidoProduto.destroy', $pedido_produto->pedidosprodutosId) }}" method="GET">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-trash3"></i></button>
+                                </form>
+
+
+                            </td>
+                        </tr>
+                    </tbody>    
+                    @endforeach
+                </table>
+            </div>
+            <div class="buttons">
                 <a href="{{ route('pedido.index') }}" class="btn-submit" style="width: 100px;">Pedidos</a>
                 <div class="table-paginate">
                     {{$pedidos_produtos->links('layouts.pagination')}}

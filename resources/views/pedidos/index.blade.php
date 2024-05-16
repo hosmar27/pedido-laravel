@@ -24,6 +24,7 @@
                     <th>Cliente</th>
                     <th>Contato</th>
                     <th>Produto</th>
+                    <th>Criar</th>
                     <th>Editar</th>
                     <th>Excluir</th>
                 </tr>
@@ -37,7 +38,10 @@
                             <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-list" type="submit"></i></button>
                         </form>
                     </td>
-                    <td> 
+                    <td style="display: flex;gap:10px"> 
+                        <a href="{{ route('pedidoProduto.create', $pedido->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-plus-circle"></i></a>
+                    </td>
+                    <td>
                         <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>
                     </td>
                     <td>    

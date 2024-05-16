@@ -26,7 +26,8 @@
                     <th>Cliente</th>
                     <th>Telefone</th>
                     <th>CPF</th>
-                    <th>Excluir/Editar</th>
+                    <th>Editar</th>
+                    <th>Excluir</th>
                 </tr>
                 @foreach ($contatos as $contato)
                 <tr>
@@ -35,12 +36,14 @@
                     <td>{{$contato->cliente_id}}</td>
                     <td>{{$contato->telefone}}</td>
                     <td>{{$contato->cpf}}</td>
-                    <td class="action">
-                        <a href="{{ route('contato.edit', $contato->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></a>
-                        <form method="post" action="{{ route('contato.destroy', $contato->id) }}">
+                    <td>
+                        <a href="{{ route('contato.edit', $contato->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>
+                    </td>
+                    <td>    
+                        <form action="{{ route('contato.destroy', $contato->id) }}" method="post">
                             @csrf
                             @method('delete')
-                            <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-trash3"></i></button>
+                            <button type="submit" value="delete" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-trash3"></i></button>
                         </form>
                     </td>
                 </tr>
