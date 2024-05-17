@@ -36,23 +36,21 @@
                     @foreach ($pedidos_produtos as $pedido_produto)
                     <tbody>
                         <tr>
-                            <td>{{$pedido_produto->pedidosprodutosId}}</td>
+                            <td>{{$pedido_produto->id}}</td>
                             <td>{{$pedido_produto->valor}}</td>
                             <td>{{$pedido_produto->desconto}}</td>
                             <td>{{$pedido_produto->pedidoId}}</td>                            
                             <td>{{$pedido_produto->nome}}</td>
                             <td>{{$pedido_produto->quantidade}}</td>
                             <td>
-                                <a href="{{ route('pedidoProduto.edit', $pedido_produto->pedidosprodutosId) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>
+                                <a href="{{ route('pedidoProduto.edit', $pedido_produto->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>
                             </td>
                             <td> 
-                                <form action="{{ route('pedidoProduto.destroy', $pedido_produto->pedidosprodutosId) }}" method="GET">
+                                <form action="{{ route('pedidoProduto.destroy', $pedido_produto->id) }}" method="GET">
                                     @csrf
                                     @method('delete')
                                     <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-trash3"></i></button>
                                 </form>
-
-
                             </td>
                         </tr>
                     </tbody>    
@@ -83,11 +81,11 @@
     });
     Toast3.fire({
         icon: "success",
-        title: "Contato excluido"
+        title: "Pedido & Produto excluido"
     });
 </script>
 @endif
-@if ($message = Session::get('sucess'))
+@if ($message = Session::get('success'))
 <script type="text/javascript">
     const Toast = Swal.mixin({
         toast: true,
@@ -102,7 +100,7 @@
     });
     Toast.fire({
         icon: "success",
-        title: "Contato adicionado"
+        title: "Pedido & Produto adicionado"
     });
 </script>
 @endif
@@ -121,7 +119,7 @@
     });
     Toast2.fire({
         icon: "success",
-        title: "Contato atualizado"
+        title: "Pedido & Produto atualizado"
     });
 </script>
 @endif

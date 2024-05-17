@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Pagination\Paginator;
 
-use function Laravel\Prompts\select;
-
 class PedidoController extends Controller
 {
     
@@ -111,21 +109,20 @@ class PedidoController extends Controller
 
     public function indexPedidoProduto(Request $request, $pedidoId)
     {
-
         $id = $pedidoId;
 
-        $perPage = 4;
-
         $pedidos_produtos = PedidoProduto::where('pedidos_produtos.pedido_id', $pedidoId)
-            ->join('pedidos','pedidos.id', '=', 'pedidos_produtos.pedido_id')
-            ->join('produtos','produtos.id', '=', 'pedidos_produtos.produto_id')
-            ->select('pedidos.id AS pedidoId','produtos.id AS produtoId','produtos.nome','produtos.estoque','pedidos_produtos.id AS pedidosprodutosId','pedidos_produtos.quantidade','pedidos_produtos.valor','pedidos_produtos.desconto')
-            ->where('pedidos.deleted_at', '=', null)
-            ->where('pedidos_produtos.deleted_at', '=', null)
-            ->paginate($perPage);
+                            ->join('pedidos','pedidos.id', '=', 'pedidos_produtos.pedido_id')
+                            ->join('produtos','produtos.id', '=', 'pedidos_produtos.produto_id')
+                            ->select('pedidos.id AS pedidoId','produtos.id AS produtoId','produtos.nome','produtos.estoque',
+                            'pedidos_produtos.id AS id','pedidos_produtos.quantidade',
+                            'pedidos_produtos.valor','pedidos_produtos.desconto')
+                            ->where('pedidos.deleted_at', '=', null)
+                            ->where('pedidos_produtos.deleted_at', '=', null)
+                            ->paginate(4);
 
 
-        return view('pedidos_produtos.index',compact('pedidos_produtos','pedidoId'))->with('i',(request()->input('page',1) -1) *5);
+        return view('pedidos_produtos.index',compact('pedidos_produtos','pedidoId'))->with('i',(request()->input('page',1) -1) *4);
     }
     
     public function createPedidoProduto($id)
@@ -165,12 +162,12 @@ class PedidoController extends Controller
         $pedidosprodutos->observacao = $request->observacao;
 
         $pedidosprodutos->save();
-        return redirect('/pedido')->with('sucess', 'Pedido criado');
+        return redirect('/pedido')->with('succ ess', 'Pedido criado');
     }
 
-    public function editPedidoProduto()
+    public function editPedidoProduto(PedidoProduto $pedido_produto)
     {
-
+        
     }
 
     public function updatePedidoProduto()
@@ -178,11 +175,10 @@ class PedidoController extends Controller
         
     }
 
-    public function destroyPedidoProduto(PedidoProduto $pedido_produto)
+    public function destroyPedidoProduto($id)
     {
-        $pedido_produto = PedidoProduto::find($pedido_produto->pedidosprodutosId);
-        dd($pedido_produto);
-        return redirect('pedidoProduto.index', $pedido_produto->pedidoId)->with('delete','Pedido & Produto excluido');
+        PedidoProduto::find($id)->delete();
+        return back()->with('delete','Pedido & Produto excluido');
     }
 
     public function fetchProduto(Request $request)

@@ -24,7 +24,7 @@
                     <th>Cliente</th>
                     <th>Contato</th>
                     <th>Produto</th>
-                    <th>Criar</th>
+                    <th>Adicionar</th>
                     <th>Editar</th>
                     <th>Excluir</th>
                 </tr>
@@ -33,18 +33,18 @@
                     <td>{{$pedido->id}}</td>
                     <td>{{$pedido->cliente->nome}}</td>
                     <td>{{$pedido->contato->nome}}</td>
-                    <td class="icon">
+                    <td>
                         <form method="get" action="{{ route('pedidoProduto.index', $pedido->id) }}">
                             <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-list" type="submit"></i></button>
                         </form>
                     </td>
-                    <td style="display: flex;gap:10px"> 
+                    <td>
                         <a href="{{ route('pedidoProduto.create', $pedido->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-plus-circle"></i></a>
                     </td>
                     <td>
-                        <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>
+                        <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>   
                     </td>
-                    <td>    
+                    <td>   
                         <form method="post" action="{{ route('pedido.destroy', $pedido->id) }}">
                             @method('delete')
                             @csrf
