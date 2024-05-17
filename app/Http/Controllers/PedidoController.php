@@ -6,7 +6,6 @@ use App\Models\{Pedido, Produto, Contato, PedidoProduto};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Pagination\Paginator;
 
 class PedidoController extends Controller
 {
@@ -16,13 +15,16 @@ class PedidoController extends Controller
      */
     public function index(Request $request)
     {
-        $query = DB::select("SELECT pedidos.id, clientes.id, contatos.id, clientes.nome, contatos.nome
+        $query = DB::select("SELECT pedidos.id,pedidos.total_p, clientes.id, contatos.id, clientes.nome, contatos.nome
         FROM `pedidos`
         JOIN `clientes` ON pedidos.cliente_id = clientes.id 
         JOIN `contatos` ON contatos.id = pedidos.contato_id 
         WHERE pedidos.deleted_at IS NULL
         ORDER BY pedidos.id
         ");
+
+        //$query = DB::select();
+
         $pedidos = collect($query)->toArray();
 
         $keyword = $request->get('search');
@@ -84,6 +86,7 @@ class PedidoController extends Controller
         $contato = collect($query)->toArray();
         $query = DB::select("SELECT * FROM `clientes` WHERE deleted_at IS null");
         $clientes = collect($query)->toArray();
+
         return view('pedidos.edit',['pedido' => $pedido ,'contato' => $contato, 'clientes' => $clientes]);
     }
 

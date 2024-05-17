@@ -23,6 +23,7 @@
                     <th>ID</th>
                     <th>Cliente</th>
                     <th>Contato</th>
+                    <th>Total</th>
                     <th>Produto</th>
                     <th>Adicionar</th>
                     <th>Editar</th>
@@ -33,6 +34,7 @@
                     <td>{{$pedido->id}}</td>
                     <td>{{$pedido->cliente->nome}}</td>
                     <td>{{$pedido->contato->nome}}</td>
+                    <td></td>
                     <td>
                         <form method="get" action="{{ route('pedidoProduto.index', $pedido->id) }}">
                             <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-list" type="submit"></i></button>
