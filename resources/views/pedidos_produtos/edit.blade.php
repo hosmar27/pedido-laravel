@@ -5,9 +5,9 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
     <div class="container">
-    <form action="{{ route('pedidoProduto.store')}}" method="post">
+    <form action="{{ route('pedidoProduto.update', $pedido_produto->id)}}" method="post">
         @csrf
-        <h1>Inserir produtos</h1>
+        <h1>Editar produtos</h1>
         @if($errors->any)
         <div>
             <ul>
@@ -48,12 +48,12 @@
                 </div>
                 <div class="subcolumn">
                     <label for="pedido_id">Pedido:</label>
-                    <input type="text" value="{{$pedidos->id}}" placeholder="Ex: 19" class="form-control" name="pedido_id" id="pedido_id">
+                    <input type="text" value="{{$pedido_produto->id}}" placeholder="Ex: 19" class="form-control" name="pedido_id" id="pedido_id">
                 </div>
             </div>
             <div class="buttons">
-                <button class="btn-submit" type="submit" action="{{ route('pedidoProduto.store')}}">Cadastrar</button>
-                <a href="{{ route('pedidoProduto.index', $pedidos->id)}}">Voltar</a>
+                <button class="btn-submit" type="submit" action="{{ route('pedidoProduto.update',$pedido_produto->id)}}">Cadastrar</button>
+                <a href="{{ route('pedidoProduto.index', $pedido_produto->id)}}">Voltar</a>
             </div>
         </form>
     </div>

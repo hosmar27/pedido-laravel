@@ -18,8 +18,9 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::table('stnk', function(Blueprint $table) {
-            $table->renameColumn('id_stnk', 'id');
+        Schema::table('pedidos_produtos', function(Blueprint $table) {
+            $table->renameColumn('pedidos_id', 'pedido_id');
+            $table->renameColumn('produtos_id', 'produto_id');
         });
     }
 

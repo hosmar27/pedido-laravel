@@ -16,6 +16,8 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('produtos.estoque');
+        Schema::table('produtos', function(Blueprint $table) {
+            $table->renameColumn('estoque', 'quantidade');
+        });
     }
 };

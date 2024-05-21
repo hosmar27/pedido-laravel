@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{ClienteController, ContatoController, ProdutoController, PedidoController};
+use App\Http\Controllers\{ClienteController, ContatoController, PdfController, ProdutoController, PedidoController};
 
 /*
 |--------------------------------------------------------------------------
@@ -34,12 +34,14 @@ Route::resource('pedido', PedidoController::class);
 Route::get('/pedido/{id}/edit',[PedidoController::class,'edit']);
 Route::put('/pedido/{id}/update',[PedidoController::class,'update']);
 Route::get('/pedido/{id}/destroy',[PedidoController::class,'destroy']);
-Route::post('/pedido/fetchContatos',[PedidoController::class,'fetchContatos']);
+Route::post('/pedido/fetchContatos',[PedidoController::class,'fetchContatos'])->name('fetchContatos');
 
-Route::get('/pedido_produto/{pedidoId}/index',[PedidoController::class,'indexPedidoProduto'])->name('pedidoProduto.index');
+Route::get('/pedido_produto/{id}/index',[PedidoController::class,'indexPedidoProduto'])->name('pedidoProduto.index');
 Route::get('/pedido_produto/{id}/create', [PedidoController::class, 'createPedidoProduto'])->name('pedidoProduto.create');
 Route::post('/pedido_produto/store', [PedidoController::class, 'storePedidoProduto'])->name('pedidoProduto.store');
 Route::get('/pedido_produto/{id}/edit',[PedidoController::class,'editPedidoProduto'])->name('pedidoProduto.edit');
 Route::post('/pedido_produto/{id}/update', [PedidoController::class, 'updatePedidoProduto'])->name('pedidoProduto.update');
 Route::get('/pedido_produto/{id}/destroy', [PedidoController::class, 'destroyPedidoProduto'])->name('pedidoProduto.destroy');
-Route::post('/pedido/fetchProduto',[PedidoController::class,'fetchProduto']);
+Route::post('/pedido/fetchProduto',[PedidoController::class,'fetchProduto'])->name('fetchProduto');
+
+Route::get('/pdf/{id}/pedido', [PdfController::class, 'gerarPDF'])->name('pdfGerar');

@@ -56,7 +56,7 @@
                     headers:{
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{ url('fetchContatos')}}",
+                    url: "{{ url('/pedido/fetchContatos')}}",
                     type: "POST",
                     data: {
                         cliente_id: clienteId

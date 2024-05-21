@@ -7,7 +7,7 @@
         <div class="column">
             <h1>Pedidos & Produtos</h1>
             <div class="main">
-                <form method="GET" action="{{ route('pedidoProduto.index',['pedidos_produtos' => $pedidos_produtos, 'pedidoId' => $pedidoId])}}" accept-charset="UTF-8" role="search">
+                <form method="GET" action="{{ route('pedidoProduto.index',['pedidos_produtos' => $pedidos_produtos, 'id' => $id])}}" accept-charset="UTF-8" role="search">
                     @csrf
                     <div class="table-search" style="width: 350px;display:flex;flex-direction:row">
                         <div>

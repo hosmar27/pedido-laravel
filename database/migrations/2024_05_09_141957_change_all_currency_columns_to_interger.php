@@ -31,8 +31,18 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('interger', function (Blueprint $table) {
-            //
+        Schema::table('produtos', function (Blueprint $table) {
+            $table->dropColumn('valor');
+        });
+
+        Schema::table('pedidos', function (Blueprint $table) {
+            $table->dropColumn('total');
+            $table->dropColumn('frete');
+        });
+
+        Schema::table('pedidos_produtos', function (Blueprint $table) {
+            $table->dropColumn('valor');
+            $table->dropColumn('desconto');
         });
     }
 };

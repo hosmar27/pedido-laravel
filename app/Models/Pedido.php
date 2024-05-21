@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class pedido extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, CascadeSoftDeletes;
+
+    protected $cascadeDeletes = ['pedidos_produtos'];
 
     protected $table = 'pedidos';
 
@@ -20,5 +23,10 @@ class pedido extends Model
     public function contato()
     {
         return $this->belongsTo(Contato::class);
+    }
+
+    public function pedidos_produtos()
+    {
+        return $this->hasMany(PedidoProduto::class);
     }
 }

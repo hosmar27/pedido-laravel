@@ -6,6 +6,7 @@ use App\Models\{Pedido, Produto, Contato, PedidoProduto};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Barryvdh\DomPDF\PDF;
 
 class PedidoController extends Controller
 {
@@ -13,6 +14,7 @@ class PedidoController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index(Request $request)
     {
         $query = DB::select("SELECT pedidos.id,pedidos_produtos.quantidade,pedidos_produtos.valor,pedidos_produtos.desconto,pedidos_produtos.total, clientes.id, contatos.id, clientes.nome, contatos.nome
@@ -103,18 +105,15 @@ class PedidoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    /*public function destroy(Pedido $pedido)
+    public function destroy($id)
     {
-        $query = PedidoProduto::delete("SELECT ")
+        Pedido::find($id)->delete();
+        return back()->with('delete','Pedido & Produto excluido');
+    }
 
-        return redirect('/pedido')->with('delete','Pedido excluido');
-    }*/
-
-    public function indexPedidoProduto(Request $request, $pedidoId)
+    public function indexPedidoProduto(Request $request, $id)
     {
-        $id = $pedidoId;
-
-        $pedidos_produtos = PedidoProduto::where('pedidos_produtos.pedido_id', $pedidoId)
+        $pedidos_produtos = PedidoProduto::where('pedidos_produtos.pedido_id', $id)
                             ->join('pedidos','pedidos.id', '=', 'pedidos_produtos.pedido_id')
                             ->join('produtos','produtos.id', '=', 'pedidos_produtos.produto_id')
                             ->select('pedidos.id AS pedidoId','produtos.id AS produtoId','produtos.nome','produtos.estoque',
@@ -125,7 +124,7 @@ class PedidoController extends Controller
                             ->paginate(4);
         
 
-        return view('pedidos_produtos.index',compact('pedidos_produtos','pedidoId'))->with('i',(request()->input('page',1) -1) *4);
+        return view('pedidos_produtos.index',compact('pedidos_produtos','id'))->with('i',(request()->input('page',1) -1) *4);
     }
     
     public function createPedidoProduto($id)
@@ -196,9 +195,40 @@ class PedidoController extends Controller
         return view('pedidos_produtos.edit',['pedido_produto' => $pedido_produto , 'produtos' => $produtos]);
     }
 
-    public function updatePedidoProduto()
+    public function updatePedidoProduto(Request $request, $id)
     {
+
+        $pedido_produto = PedidoProduto::find($request->id);
+
+        //Chama o valor direto do forms
+        $valor = $request->input('valor');
+        //Transforma os valores referentes a dinheiro no formato correto
+        $valor = str_replace('.','',$valor);
+        $valor = str_replace(',','.',$valor);
+
+        //Chama o valor direto do forms
+        $desconto = $request->input('desconto');
+        //Transforma os valores referentes a dinheiro no formato correto
+        $desconto = str_replace('.','',$desconto);
+        $desconto = str_replace(',','.',$desconto);
         
+        $quantidade = $request->input('quantidade');
+        $quantidade = str_replace('.','', $quantidade);
+        $quantidade = str_replace(',','', $quantidade);
+
+        $pedido_produto->valor = $valor;
+        $pedido_produto->desconto = $desconto;
+        $pedido_produto->produto_id = $request->input('produto_id');
+        $pedido_produto->observacao = $request->input('observacao');
+        $pedido_produto->quantidade = $request->input('quantidade');
+
+        $total = ($valor-$desconto)*$quantidade;
+
+        $pedido_produto->total = $total;
+
+        $pedido_produto->save();
+        return redirect()->route('pedidoProduto.index', ['id' => $id])->with('update','Pedido atualizado');
+
     }
 
     public function destroyPedidoProduto($id)
@@ -218,17 +248,5 @@ class PedidoController extends Controller
         $produto = collect($query)->toArray();
 
         return response()->json($produto);
-    }
-
-    public function fetchPedido(Request $request)
-    {
-        $query = Pedido::where("id", $request->id)
-                                ->get(["id","cliente_id","contato_id","total","frete"])
-                                ->whereNull(["deleted_at"]);
-
-
-        $pedido = collect($query)->toArray();
-
-        return response()->json($pedido);
     }
 }
