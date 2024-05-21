@@ -18,4 +18,9 @@ class produto extends Model
         return $this->hasMany(PedidoProduto::class);
     }
 
+    public function setTotalAttribute()
+    {
+        $this->attributes['total'] = $this->quantidade * $this->valor;
+    }
+
 }

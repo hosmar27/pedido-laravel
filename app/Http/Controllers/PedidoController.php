@@ -15,15 +15,14 @@ class PedidoController extends Controller
      */
     public function index(Request $request)
     {
-        $query = DB::select("SELECT pedidos.id,pedidos.total_p, clientes.id, contatos.id, clientes.nome, contatos.nome
+        $query = DB::select("SELECT pedidos.id,pedidos_produtos.quantidade,pedidos_produtos.valor,pedidos_produtos.desconto,pedidos_produtos.total, clientes.id, contatos.id, clientes.nome, contatos.nome
         FROM `pedidos`
         JOIN `clientes` ON pedidos.cliente_id = clientes.id 
-        JOIN `contatos` ON contatos.id = pedidos.contato_id 
+        JOIN `contatos` ON pedidos.contato_id = contatos.id 
+        JOIN `pedidos_produtos` ON pedidos.id = pedidos_produtos.pedido_id
         WHERE pedidos.deleted_at IS NULL
         ORDER BY pedidos.id
         ");
-
-        //$query = DB::select();
 
         $pedidos = collect($query)->toArray();
 
@@ -104,11 +103,12 @@ class PedidoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pedido $pedido)
+    /*public function destroy(Pedido $pedido)
     {
-        $pedido = Pedido::find($pedido->id)->delete();
+        $query = PedidoProduto::delete("SELECT ")
+
         return redirect('/pedido')->with('delete','Pedido excluido');
-    }
+    }*/
 
     public function indexPedidoProduto(Request $request, $pedidoId)
     {
@@ -118,12 +118,12 @@ class PedidoController extends Controller
                             ->join('pedidos','pedidos.id', '=', 'pedidos_produtos.pedido_id')
                             ->join('produtos','produtos.id', '=', 'pedidos_produtos.produto_id')
                             ->select('pedidos.id AS pedidoId','produtos.id AS produtoId','produtos.nome','produtos.estoque',
-                            'pedidos_produtos.id AS id','pedidos_produtos.quantidade',
-                            'pedidos_produtos.valor','pedidos_produtos.desconto')
-                            ->where('pedidos.deleted_at', '=', null)
-                            ->where('pedidos_produtos.deleted_at', '=', null)
+                            'pedidos_produtos.id AS id','pedidos_produtos.quantidade AS quantidade',
+                            'pedidos_produtos.valor AS valor','pedidos_produtos.desconto','pedidos_produtos.total AS total')
+                            ->whereNull('pedidos.deleted_at')
+                            ->whereNull('pedidos_produtos.deleted_at')
                             ->paginate(4);
-
+        
 
         return view('pedidos_produtos.index',compact('pedidos_produtos','pedidoId'))->with('i',(request()->input('page',1) -1) *4);
     }
@@ -133,6 +133,8 @@ class PedidoController extends Controller
         $query = DB::select("SELECT produtos.id, produtos.nome, produtos.valor, produtos.estoque AS quantidade, produtos.descricao
                             FROM `produtos`
                             WHERE deleted_at IS NULL");
+
+        DB::table("pedidos_produtos")->select(DB::raw("(valor * quantidade) as total"))->get();
 
         $produtos = collect($query)->toArray();
 
@@ -146,31 +148,52 @@ class PedidoController extends Controller
     {
         $pedidosprodutos = new PedidoProduto();
 
-        $pedidosprodutos->quantidade = $request->quantidade;
+        //Chama o valor direto do forms
+        $valor = $request->valor;
+        //Transforma os valores referentes a dinheiro no formato correto
+        $valor = str_replace('.','',$valor);
+        $valor = str_replace(',','.',$valor);
 
         //Transforma os valores referentes a dinheiro no formato correto
-        $pedidosprodutos->valor = $request->valor;
-        $valor = $pedidosprodutos->valor;
-        $pedidosprodutos->valor = str_replace('.','',$valor);
-        $pedidosprodutos->valor = str_replace(',','.',$valor);
+        $desconto = $request->desconto;
+        $desconto = str_replace('.','',$desconto);
+        $desconto = str_replace(',','.',$desconto);
 
-        //Transforma os valores referentes a dinheiro no formato correto
-        $pedidosprodutos->desconto = $request->desconto;
-        $desconto = $pedidosprodutos->desconto;
-        $pedidosprodutos->desconto = str_replace('.','',$desconto);
-        $pedidosprodutos->desconto = str_replace(',','.',$desconto);
+        $quantidade = $request->quantidade;
 
+        //Manda os valores para variável que irá para o banco de dados
+        $pedidosprodutos->valor = $valor;
+        $pedidosprodutos->desconto = $desconto;
+        $pedidosprodutos->quantidade = $quantidade;
         $pedidosprodutos->produto_id = $request->produto_id;
         $pedidosprodutos->pedido_id = $request->pedido_id;
         $pedidosprodutos->observacao = $request->observacao;
 
+        
+        
+        $total = ($valor-$desconto)*$quantidade;
+
+        $pedidosprodutos->total = $total;
+
         $pedidosprodutos->save();
-        return redirect('/pedido')->with('succ ess', 'Pedido criado');
+        return redirect('/pedido')->with('success', 'Pedido criado');
     }
 
-    public function editPedidoProduto(PedidoProduto $pedido_produto)
+    public function editPedidoProduto(PedidoProduto $pedido_produto, $id)
     {
-        
+        $pedido_produto = PedidoProduto::findOrFail($id);
+        $query = DB::select("SELECT pedidos_produtos.pedido_id AS pp_id, pedidos_produtos.total AS pp_total, pedidos_produtos.id, pedidos_produtos.quantidade, pedidos_produtos.desconto, pedidos_produtos.produto_id, pedidos_produtos.observacao, pedidos_produtos.valor,
+        pedidos.id AS p_id, pedidos.total AS p_total, pedidos.cliente_id, pedidos.contato_id 
+        FROM `pedidos_produtos` JOIN `pedidos` ON  pedidos_produtos.pedido_id = pedidos.id 
+        WHERE pedidos_produtos.deleted_at IS NULL 
+        AND pedidos.deleted_at IS NULL");
+        $pedido_produto = collect($query)->toArray();
+
+        $pedido_produto = PedidoProduto::findOrFail($id);
+        $query = DB::select("SELECT * FROM `produtos` WHERE deleted_at IS null");
+        $produtos = collect($query)->toArray();
+
+        return view('pedidos_produtos.edit',['pedido_produto' => $pedido_produto , 'produtos' => $produtos]);
     }
 
     public function updatePedidoProduto()
@@ -209,50 +232,3 @@ class PedidoController extends Controller
         return response()->json($pedido);
     }
 }
-
-/*public function fetchProdutos()
-    {
-        $query = DB::select("SELECT produtos.id, produtos.nome, produtos.valor, produtos.estoque, produtos.descricao, pedidos_produtos.produto_id, produtos.deleted_at, pedidos_produtos.deleted_at 
-        FROM `pedidos_produtos` 
-        RIGHT JOIN `produtos` 
-        ON produtos.id = pedidos_produtos.produto_id
-        AND produtos.deleted_at IS NULL
-        AND pedidos_produtos.deleted_at IS NULL;");
-
-        $produtos = collect($query)->toArray();
-        
-        return response()->json($produtos);
-    }*/
-
-    /*public function moneyFormat($value)
-    {
-        return 'R$' . number_format($value, 2)
-    }*/
-
-    /*$query = DB::select("SELECT pedidos.id AS pedidoId, pedidos_produtos.pedido_id
-    FROM `pedidos_produtos`
-    JOIN `pedidos` ON pedidos.id = pedidos_produtos.pedido_id
-    WHERE pedidos.deleted_at IS NULL
-    AND pedidos_produtos.deleted_at");
-$pedidos = collect($query)->toArray();*/
-
-
-/*$query = DB::select("SELECT pedidos_produtos.id,pedidos_produtos.quantidade,pedidos_produtos.valor,pedidos_produtos.desconto,pedidos_produtos.observacao,pedidos_produtos.pedido_id,pedidos_produtos.produto_id,pedidos_produtos.deleted_at
-FROM `pedidos_produtos`
-WHERE pedidos_produtos.pedido_id = $pedidos
-AND pedidos_produtos.deleted_at IS NULL;");
-$pedidos_produtos = collect($query)->toArray();
-
-
- ->select('pedidos_produtos.id','pedidos_produtos.quantidade','pedidos_produtos.valor','pedidos_produtos.desconto','pedidos_produtos.observacao','pedidos_produtos.pedido_id','pedidos_produtos.produto_id','pedidos_produtos.deleted_at')
-                            ->whereNull('pedidos_produtos.deleted_at')
-
-        $keyword = $request->get('search');
-        $perPage = 5;
-
-            $pedidos_produtos = PedidoProduto::where('pedidos_produtos.pedido_id', $id)
-            ->join('pedidos','pedidos.id', '=', 'pedidos_produtos.pedido_id')
-            ->where('pedidos.deleted_at', '=', null)
-            ->where('pedidos_produtos.deleted_at', '=', null)
-            ->get()
-            ->paginate($perPage);*/

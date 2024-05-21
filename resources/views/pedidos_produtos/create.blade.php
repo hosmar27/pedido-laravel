@@ -40,7 +40,7 @@
                 <div class="column">
                     <div class="subcolumn">
                         <label for="estoque">Estoque:</label>
-                        <input type="text" placeholder="Ex: 1000" class="form-control" name="quantidade" id="estoque">
+                        <input type="text" placeholder="Ex: 1.000" class="form-control" name="quantidade" id="estoque">
                     </div>
                     <div class="subcolumn">
                         <label for="desconto">Desconto:</label>
@@ -78,8 +78,9 @@
                 success: function (produto) {
 
                     var quantidade;
-
                     var desconto;
+
+                    var estoque = quantidade;
 
                     var valor = produto[0]['valor'];
                     valor = valor.replace('.', ',');
@@ -96,9 +97,8 @@
                     //desconto = 'R$ '+desconto;
                     $('#desconto').val(desconto);
 
-                    var estoque = quantidade;
-
                     console.log(produto);
+
 
                     console.log('valor:', produto[0].valor);
                     console.log('descricao:', produto[0].descricao);

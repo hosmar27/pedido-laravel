@@ -25,10 +25,11 @@
                         <tr>
                             <th>Id</th>
                             <th>Valor</th>
+                            <th>Quantidade</th>
+                            <th>Total</th>
                             <th>Desconto</th>
                             <th>Pedido</th>
                             <th>Produto</th>
-                            <th>Quantidade</th>
                             <th>Editar</th>
                             <th>Excluir</th>
                         </tr>
@@ -38,10 +39,11 @@
                         <tr>
                             <td>{{$pedido_produto->id}}</td>
                             <td>{{$pedido_produto->valor}}</td>
+                            <td>{{$pedido_produto->quantidade}}</td>
+                            <td>{{$pedido_produto->total}}</td>
                             <td>{{$pedido_produto->desconto}}</td>
                             <td>{{$pedido_produto->pedidoId}}</td>                            
                             <td>{{$pedido_produto->nome}}</td>
-                            <td>{{$pedido_produto->quantidade}}</td>
                             <td>
                                 <a href="{{ route('pedidoProduto.edit', $pedido_produto->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>
                             </td>
