@@ -44,4 +44,4 @@ Route::post('/pedido_produto/{id}/update', [PedidoController::class, 'updatePedi
 Route::get('/pedido_produto/{id}/destroy', [PedidoController::class, 'destroyPedidoProduto'])->name('pedidoProduto.destroy');
 Route::post('/pedido/fetchProduto',[PedidoController::class,'fetchProduto'])->name('fetchProduto');
 
-Route::get('/pdf/{id}/pedido', [PdfController::class, 'gerarPDF'])->name('pdfGerar');
+Route::get('/pdf/pedido', [PdfController::class, 'gerarPDF'])->name('pdfGerar');
