@@ -35,6 +35,7 @@ Route::get('/pedido/{id}/edit',[PedidoController::class,'edit']);
 Route::put('/pedido/{id}/update',[PedidoController::class,'update']);
 Route::get('/pedido/{id}/destroy',[PedidoController::class,'destroy']);
 Route::post('/pedido/fetchContatos',[PedidoController::class,'fetchContatos'])->name('fetchContatos');
+Route::get('/pdf/{id}/pedido', [PdfController::class, 'gerarPedidoPDF'])->name('pdfGerar.pedido');
 
 Route::get('/pedido_produto/{id}/index',[PedidoController::class,'indexPedidoProduto'])->name('pedidoProduto.index');
 Route::get('/pedido_produto/{id}/create', [PedidoController::class, 'createPedidoProduto'])->name('pedidoProduto.create');
@@ -43,5 +44,3 @@ Route::get('/pedido_produto/{id}/edit',[PedidoController::class,'editPedidoProdu
 Route::post('/pedido_produto/{id}/update', [PedidoController::class, 'updatePedidoProduto'])->name('pedidoProduto.update');
 Route::get('/pedido_produto/{id}/destroy', [PedidoController::class, 'destroyPedidoProduto'])->name('pedidoProduto.destroy');
 Route::post('/pedido/fetchProduto',[PedidoController::class,'fetchProduto'])->name('fetchProduto');
-
-Route::get('/pdf/pedido', [PdfController::class, 'gerarPDF'])->name('pdfGerar');

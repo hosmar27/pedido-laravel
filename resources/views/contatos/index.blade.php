@@ -51,6 +51,7 @@
             </table>
             <div class="buttons">
                 <a href="{{ route('contato.create')}}" class="btn-submit" style="width: 100px;">Cadastrar</button></a>
+                <a href="{{ route('pedido.index') }}" class="btn-submit" style="width: 100px;">Pedido</a>
                 <div class="table-paginate">
                     {{$contatos->links('layouts.pagination')}}
                 </div>

@@ -6,7 +6,6 @@ use App\Models\{Pedido, Produto, Contato, PedidoProduto};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Barryvdh\DomPDF\PDF;
 
 class PedidoController extends Controller
 {
@@ -28,19 +27,22 @@ class PedidoController extends Controller
 
         $pedidos = collect($query)->toArray();
 
+
         $keyword = $request->get('search');
         $perPage = 3;
 
         if (!empty($keyword)) {
-            $pedidos = Pedido::where('id', 'LIKE', "%$keyword%")
+            $pedidos_link = Pedido::where('id', 'LIKE', "%$keyword%")
                 ->orWhere('cliente_id', 'LIKE', "$keyword")
                 ->orWhere('pedido_id', 'LIKE', "$keyword")
                 ->latest()->paginate($perPage);
         } else {
-            $pedidos = Pedido::latest()->paginate($perPage);
+            $pedidos_link = Pedido::latest()->paginate($perPage);
         }
 
-        return view('pedidos.index', ['pedidos' => $pedidos])->with('i', (request()->input('page', 1) - 1) * 3);
+        $pedidos = Pedido::withSum('pedidos_produtos', 'total')->get();
+
+        return view('pedidos.index', ['pedidos' => $pedidos],['pedidos_link' => $pedidos_link])->with('i', (request()->input('page', 1) - 1) * 3);
     }
 
     /**
@@ -122,7 +124,6 @@ class PedidoController extends Controller
                             ->whereNull('pedidos.deleted_at')
                             ->whereNull('pedidos_produtos.deleted_at')
                             ->paginate(4);
-        
 
         return view('pedidos_produtos.index',compact('pedidos_produtos','id'))->with('i',(request()->input('page',1) -1) *4);
     }
@@ -137,8 +138,10 @@ class PedidoController extends Controller
 
         $produtos = collect($query)->toArray();
 
-        $pedidos = Pedido::findOrFail($id);
-
+        $pedidos = Pedido::select('pedidos.id','pedidos.total AS pedido_total')
+                            ->where('pedidos.id', '=', $id)
+                            ->first();
+                        
 
         return view('pedidos_produtos.create', ['produtos'=>$produtos], ['pedidos'=>$pedidos]);
     }
@@ -168,10 +171,10 @@ class PedidoController extends Controller
         $pedidosprodutos->pedido_id = $request->pedido_id;
         $pedidosprodutos->observacao = $request->observacao;
 
-        
-        
-        $total = ($valor-$desconto)*$quantidade;
+        $valor_desconto = $valor-$desconto;
+        $pedidosprodutos->valor_desconto = $valor_desconto;
 
+        $total = $valor_desconto*$quantidade;
         $pedidosprodutos->total = $total;
 
         $pedidosprodutos->save();
@@ -222,12 +225,16 @@ class PedidoController extends Controller
         $pedido_produto->observacao = $request->input('observacao');
         $pedido_produto->quantidade = $request->input('quantidade');
 
-        $total = ($valor-$desconto)*$quantidade;
+        $valor_desconto = $valor-$desconto;
+        $pedido_produto->valor_desconto = $valor_desconto;
 
+        $total = $valor_desconto*$quantidade;
         $pedido_produto->total = $total;
 
+        $pedido = $pedido_produto->pedido_id;
+
         $pedido_produto->save();
-        return redirect()->route('pedidoProduto.index', ['id' => $id])->with('update','Pedido atualizado');
+        return redirect()->route('pedidoProduto.index', $pedido)->with('update','Pedido atualizado');
 
     }
 

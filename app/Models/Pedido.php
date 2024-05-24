@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class pedido extends Model
+class Pedido extends Model
 {
     use SoftDeletes, CascadeSoftDeletes;
 

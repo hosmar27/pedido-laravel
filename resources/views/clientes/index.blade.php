@@ -34,7 +34,7 @@
                     <td>{{$cliente->endereco}}</td>
                     <td>{{$cliente->telefone}}</td>
                     <td class="action">
-                        <a href="{{ route('cliente.edit', $cliente->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></a>
+                        <a href="{{ route('cliente.edit', $cliente->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>
                         <form method="post" action="{{ route('cliente.destroy', $cliente->id) }}">
                             @csrf
                             @method('delete')
@@ -46,6 +46,7 @@
             </table>
             <div class="buttons">
                 <a href="{{ route('cliente.create')}}" class="btn-submit" style="width: 150px;">Cadastrar</a>
+                <a href="{{ route('pedido.index') }}" class="btn-submit" style="width: 100px;">Pedido</a>
                 <div class="table-paginate">
                     {{$clientes->links('layouts.pagination')}}
                 </div>

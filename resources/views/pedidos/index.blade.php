@@ -26,6 +26,7 @@
                     <th>Total</th>
                     <th>Produto</th>
                     <th>Adicionar</th>
+                    <th>PDF</th>
                     <th>Editar</th>
                     <th>Excluir</th>
                 </tr>
@@ -34,7 +35,7 @@
                     <td>{{$pedido->id}}</td>
                     <td>{{$pedido->cliente->nome}}</td>
                     <td>{{$pedido->contato->nome}}</td>
-                    <td>{{$pedido->total}}</td>
+                    <td>{{$pedido->pedidos_produtos_sum_total}}</td>
                     <td>
                         <form method="get" action="{{ route('pedidoProduto.index', $pedido->id) }}">
                             <button type="submit" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-list" type="submit"></i></button>
@@ -42,6 +43,9 @@
                     </td>
                     <td>
                         <a href="{{ route('pedidoProduto.create', $pedido->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-plus-circle"></i></a>
+                    </td>
+                    <td>
+                        <a href="{{ route('pdfGerar.pedido', $pedido->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-filetype-pdf"></i></a>
                     </td>
                     <td>
                         <a href="{{ route('pedido.edit', $pedido->id) }}" class="btn-submit" style="width: 50px;height: 30px;"><i class="bi bi-pencil-square"></i></a>   
@@ -58,8 +62,10 @@
             </table>
             <div class="buttons">
                 <a href="{{ route('pedido.create') }}" class="btn-submit" style="width: 100px;">Cadastrar</a>
+                <a href="{{ route('cliente.index') }}" class="btn-submit" style="width: 100px;">Cliente</a>
+                <a href="{{ route('contato.index') }}" class="btn-submit" style="width: 100px;">Contato</a>
                 <div class="table-paginate">
-                    {{$pedidos->links('layouts.pagination')}}
+                    {{$pedidos_link->links('layouts.pagination')}}
                 </div>
             </div>
         </div>
